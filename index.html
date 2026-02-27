@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kartik Joshi — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --navy:#0A1628;--mid:#0D1F3C;--gold:#C9A84C;--amber:#F5A623;
+  --teal:#00B4A6;--coral:#E8635A;--lav:#9B89D4;--green:#2ECC71;
+  --sky:#3BAFDA;--text:#E8E4DA;--muted:#8A97AB;
+  --card:rgba(255,255,255,0.04);--cb:rgba(255,255,255,0.08);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);overflow-x:hidden;line-height:1.6}
+
+/* LOCK */
+#lock{position:fixed;inset:0;z-index:9999;background:var(--navy);display:flex;align-items:center;justify-content:center;
+  background-image:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(0,180,166,.1) 0%,transparent 60%)}
+.lbox{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;
+  padding:48px;max-width:420px;width:90%;text-align:center}
+.lico{font-size:3rem;margin-bottom:16px}
+.ltit{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;margin-bottom:8px}
+.lsub{color:var(--muted);font-size:.88rem;margin-bottom:28px;line-height:1.6}
+.lhint{display:inline-block;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);
+  color:var(--gold);border-radius:6px;padding:6px 14px;font-size:.75rem;
+  font-family:'DM Mono',monospace;letter-spacing:.1em;margin-bottom:24px}
+.linput{width:100%;padding:14px 18px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);border-radius:10px;color:var(--text);
+  font-size:1.2rem;font-family:'DM Mono',monospace;letter-spacing:.3em;
+  text-align:center;outline:none;transition:border-color .2s;margin-bottom:14px}
+.linput:focus{border-color:var(--teal)}
+.linput::placeholder{letter-spacing:.05em;color:var(--muted);font-size:.85rem}
+.lbtn{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--amber));
+  border:none;border-radius:10px;color:var(--navy);font-family:'DM Sans',sans-serif;
+  font-weight:700;font-size:.95rem;cursor:pointer;transition:all .2s}
+.lbtn:hover{opacity:.9;transform:translateY(-1px)}
+.lerr{color:var(--coral);font-size:.82rem;margin-top:10px;min-height:20px}
+.lfoot{margin-top:20px;color:var(--muted);font-size:.72rem}
+
+/* MAIN */
+#site{display:none}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 48px;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,22,40,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.07)}
+.nbrand{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);cursor:pointer}
+.nlinks{display:flex;gap:22px;list-style:none}
+.nlinks li button{color:var(--muted);background:none;border:none;font-size:.74rem;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:color .2s;
+  font-family:'DM Sans',sans-serif;padding:4px 0}
+.nlinks li button:hover{color:var(--gold)}
+.nlinks li button.act{color:var(--gold)}
+.nlockbtn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  color:var(--muted);border-radius:6px;padding:6px 14px;font-size:.72rem;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.nlockbtn:hover{color:var(--coral);border-color:rgba(232,99,90,.4)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 80px 80px;position:relative;overflow:hidden}
+.hbg{position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 70% 30%,rgba(0,180,166,.1) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 70% at 5% 80%,rgba(201,168,76,.08) 0%,transparent 55%)}
+.hgrid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:64px 64px;
+  -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);
+  mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%)}
+.hinner{position:relative;z-index:2;max-width:680px}
+.hmono{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--teal);
+  letter-spacing:.22em;text-transform:uppercase;margin-bottom:20px}
+.hname{font-family:'Playfair Display',serif;font-size:clamp(3.2rem,7vw,6.5rem);
+  font-weight:900;line-height:1;margin-bottom:36px}
+.hname .acc{color:var(--gold)}
+.htagline{font-size:1rem;color:var(--muted);font-weight:300;margin-bottom:36px;max-width:560px;line-height:1.7}
+.badges{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:44px}
+.badge{padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:500;letter-spacing:.05em;border:1px solid}
+.bt{color:var(--teal);border-color:rgba(0,180,166,.35);background:rgba(0,180,166,.07)}
+.bg{color:var(--gold);border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.07)}
+.bl{color:var(--lav);border-color:rgba(155,137,212,.35);background:rgba(155,137,212,.07)}
+.bc{color:var(--coral);border-color:rgba(232,99,90,.35);background:rgba(232,99,90,.07)}
+.hbtns{display:flex;gap:14px}
+.bgold{padding:13px 30px;background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--navy);
+  border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.85rem;
+  cursor:pointer;letter-spacing:.04em;transition:all .2s}
+.bgold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(201,168,76,.3)}
+.bghost{padding:13px 30px;background:transparent;color:var(--text);
+  border:1px solid rgba(255,255,255,.14);border-radius:8px;font-family:'DM Sans',sans-serif;
+  font-weight:500;font-size:.85rem;cursor:pointer;letter-spacing:.04em;transition:all .2s}
+.bghost:hover{border-color:var(--gold);color:var(--gold)}
+.hstats{position:absolute;right:80px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:20px}
+.sc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;padding:18px 22px;text-align:center;min-width:130px}
+.sn{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1;margin-bottom:4px}
+.sl{font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+/* SECTIONS */
+section{padding:90px 80px}
+.slabel{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--teal);
+  letter-spacing:.25em;text-transform:uppercase;margin-bottom:10px}
+.stitle{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:700;line-height:1.15;margin-bottom:12px}
+.ssub{color:var(--muted);font-size:.95rem;max-width:520px;margin-bottom:52px}
+.divl{width:48px;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal));
+  border-radius:2px;margin-bottom:20px}
+
+/* ABOUT */
+#about{background:linear-gradient(180deg,var(--navy),rgba(13,31,60,.5))}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.atext p{color:var(--muted);font-size:.93rem;line-height:1.8;margin-bottom:18px}
+.atext p strong{color:var(--text);font-weight:500}
+.igrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.iitem{background:var(--card);border:1px solid var(--cb);border-radius:10px;padding:14px 18px}
+.ilabel{font-size:.65rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.ival{font-size:.85rem;font-weight:500;color:var(--text)}
+.ival a{color:var(--teal);text-decoration:none}
+.ival a:hover{text-decoration:underline}
+
+/* SKILLS */
+#skills{background:rgba(13,31,60,.4)}
+.sk2{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.sktit{font-size:.78rem;font-weight:600;color:var(--muted);letter-spacing:.1em;
+  text-transform:uppercase;margin-bottom:18px}
+.sbars{display:flex;flex-direction:column;gap:14px;margin-bottom:32px}
+.sbh{display:flex;justify-content:space-between;margin-bottom:7px}
+.sbn{font-size:.8rem;font-weight:500;color:var(--text)}
+.sbp{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted)}
+.sbtrack{height:5px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden}
+.sbfill{height:100%;border-radius:100px;width:0;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.chip{padding:5px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;font-size:.75rem;color:var(--muted);transition:all .2s}
+.chip:hover{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.3);color:var(--gold)}
+
+/* EXPERIENCE */
+#experience{background:var(--navy)}
+.expgrid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.tl{position:relative;padding-left:28px}
+.tl::before{content:'';position:absolute;left:0;top:10px;bottom:0;width:1px;
+  background:linear-gradient(180deg,var(--gold),var(--teal),transparent)}
+.titem{position:relative;margin-bottom:40px}
+.tdot{position:absolute;left:-34px;top:8px;width:11px;height:11px;border-radius:50%;
+  border:2px solid;background:var(--navy)}
+.tperiod{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:.08em;margin-bottom:6px}
+.trole{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.torg{font-size:.82rem;color:var(--muted);margin-bottom:12px}
+.tpts{list-style:none;display:flex;flex-direction:column;gap:6px}
+.tpts li{font-size:.81rem;color:var(--muted);padding-left:14px;position:relative;line-height:1.55}
+.tpts li::before{content:'›';position:absolute;left:0;font-weight:700;color:var(--gold)}
+
+/* PROJECTS */
+#projects{background:rgba(13,31,60,.5)}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.pcard{background:var(--card);border:1px solid var(--cb);border-radius:16px;padding:32px;
+  position:relative;overflow:hidden;transition:transform .3s,border-color .3s}
+.pcard:hover{transform:translateY(-4px);border-color:rgba(201,168,76,.3)}
+.pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold),var(--teal))}
+.pico{font-size:2.2rem;margin-bottom:14px}
+.pname{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:10px;color:var(--text)}
+.pdesc{font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:18px}
+.ttags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+.ttag{padding:3px 9px;background:rgba(0,180,166,.09);border:1px solid rgba(0,180,166,.2);
+  color:var(--teal);border-radius:4px;font-size:.7rem;font-family:'DM Mono',monospace}
+.plinks{display:flex;gap:12px;flex-wrap:wrap}
+.plink{font-size:.78rem;color:var(--gold);text-decoration:none;font-weight:500;transition:color .2s}
+.plink:hover{color:var(--amber)}
+
+/* EDUCATION */
+#education{background:var(--navy)}
+.egrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.ecard{background:var(--card);border:1px solid var(--cb);border-radius:14px;padding:24px;transition:transform .3s}
+.ecard:hover{transform:translateY(-3px)}
+.edeg{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:5px}
+.efi{font-size:.8rem;color:var(--gold);margin-bottom:8px;font-weight:500}
+.esch{font-size:.8rem;color:var(--muted);margin-bottom:4px}
+.eyr{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted)}
+.ewes{display:inline-block;margin-top:10px;padding:3px 10px;
+  background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);
+  color:var(--green);border-radius:4px;font-size:.65rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+
+/* CERTIFICATIONS */
+#certifications{background:rgba(13,31,60,.6)}
+.ccats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px}
+.ccbtn{padding:7px 18px;border-radius:100px;font-size:.75rem;font-weight:500;
+  cursor:pointer;border:1px solid rgba(255,255,255,.1);background:transparent;
+  color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .2s}
+.ccbtn.on,.ccbtn:hover{background:rgba(201,168,76,.12);border-color:rgba(201,168,76,.4);color:var(--gold)}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.ccard{background:var(--card);border:1px solid var(--cb);border-radius:10px;
+  padding:16px 20px;display:flex;align-items:flex-start;gap:12px;transition:all .2s}
+.ccard:hover{border-color:rgba(201,168,76,.3);transform:translateY(-2px)}
+.ccard.hide{display:none}
+.xico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.cname{font-size:.81rem;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:3px}
+.ciss{font-size:.7rem;color:var(--muted)}
+
+/* REFERENCES */
+#references{background:var(--navy)}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.rcard{background:var(--card);border:1px solid var(--cb);border-radius:14px;padding:24px;position:relative;overflow:hidden}
+.rcard::before{content:'"';position:absolute;top:-8px;right:16px;
+  font-family:'Playfair Display',serif;font-size:5rem;color:rgba(201,168,76,.07);line-height:1}
+.rname{font-weight:600;font-size:.92rem;color:var(--text);margin-bottom:5px}
+.rrole{font-size:.78rem;color:var(--gold);margin-bottom:6px}
+.rorg{font-size:.76rem;color:var(--muted);line-height:1.5}
+
+/* CONTACT */
+#contact{background:linear-gradient(180deg,rgba(13,31,60,.5),var(--mid));text-align:center;padding:90px 80px 60px}
+.clinks{display:flex;justify-content:center;gap:16px;margin:36px 0;flex-wrap:wrap}
+.clink{display:flex;align-items:center;gap:8px;padding:11px 22px;
+  background:var(--card);border:1px solid var(--cb);border-radius:8px;
+  color:var(--text);text-decoration:none;font-size:.82rem;transition:all .2s}
+.clink:hover{border-color:var(--gold);color:var(--gold)}
+footer{text-align:center;padding:20px 80px;border-top:1px solid rgba(255,255,255,.06);font-size:.72rem;color:var(--muted)}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(22px);transition:all .65s cubic-bezier(.4,0,.2,1)}
+.rev.on{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  nav{padding:0 20px}
+  .nlinks{display:none}
+  section{padding:64px 24px}
+  .hero{padding:90px 24px 60px}
+  .hstats{display:none}
+  .agrid,.sk2,.expgrid,.pgrid{grid-template-columns:1fr}
+  #contact{padding:64px 24px 40px}
+}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.35);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lock">
+  <div class="lbox">
+    <div class="lico">🔐</div>
+    <h1 class="ltit">Private Portfolio</h1>
+    <p class="lsub">This portfolio is password protected.<br>Enter the access code to view Kartik Joshi's professional profile.</p>
+    <div class="lhint">ENTER ACCESS CODE</div>
+    <input type="password" id="li" class="linput" placeholder="Enter passcode" maxlength="20" autocomplete="off">
+    <button class="lbtn" id="lbtn">Access Portfolio →</button>
+    <div class="lerr" id="le"></div>
+    <div class="lfoot">🔒 Private &amp; confidential · Share only your personal link</div>
+  </div>
+</div>
+
+<!-- MAIN SITE -->
+<div id="site">
+
+<nav>
+  <div class="nbrand" id="nb">Kartik Joshi</div>
+  <ul class="nlinks">
+    <li><button id="n0">About</button></li>
+    <li><button id="n1">Skills</button></li>
+    <li><button id="n2">Experience</button></li>
+    <li><button id="n3">Projects</button></li>
+    <li><button id="n4">Education</button></li>
+    <li><button id="n5">Certifications</button></li>
+    <li><button id="n6">References</button></li>
+    <li><button id="n7">Contact</button></li>
+  </ul>
+  <button class="nlockbtn" id="lockbtn">🔒 Lock</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hbg"></div>
+  <div class="hgrid"></div>
+  <div class="hinner">
+    <p class="hmono">Financial Analyst · Banking · FinTech &amp; AI Tools</p>
+    <h1 class="hname">Kartik <span class="acc">Joshi</span></h1>
+    <p class="htagline">Progressive experience across retail banking, corporate finance, AML/KYC/FINTRAC compliance, and investment products. WES-evaluated MBA recognized as a Canadian Master's equivalent. Based in Cornwall, Ontario.</p>
+    <div class="badges">
+      <span class="badge bt">AML / KYC / FINTRAC</span>
+      <span class="badge bg">Portfolio Management</span>
+      <span class="badge bl">Financial Modeling</span>
+      <span class="badge bc">SAP ERP</span>
+      <span class="badge bt">React.js / FinTech</span>
+      <span class="badge bg">AI Tools Enthusiast</span>
+    </div>
+    <div class="hbtns">
+      <button class="bgold" id="hexp">View Experience</button>
+      <button class="bghost" id="hcon">Get In Touch</button>
+    </div>
+  </div>
+  <div class="hstats">
+    <div class="sc"><div class="sn" style="color:var(--gold)">7+</div><div class="sl">Roles Held</div></div>
+    <div class="sc"><div class="sn" style="color:var(--teal)">30+</div><div class="sl">Certifications</div></div>
+    <div class="sc"><div class="sn" style="color:var(--lav)">13+</div><div class="sl">Yrs Volunteering</div></div>
+    <div class="sc"><div class="sn" style="color:var(--coral)">2</div><div class="sl">Countries</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="slabel rev">Who I Am</div>
+  <h2 class="stitle rev">About Me</h2>
+  <div class="divl rev"></div>
+  <div class="agrid">
+    <div class="atext rev">
+      <p>I'm a <strong>Financial Analyst and Banking Professional</strong> with progressive experience spanning retail banking at BMO, corporate finance at Deutsche Bank, investment products, and AML/KYC/FINTRAC regulatory compliance across Canada and India.</p>
+      <p>My career bridges <strong>traditional finance with modern technology</strong> — from managing complex payment operations at Deutsche Bank to independently building FinPulse, a production-grade financial analytics dashboard integrating live market data and AI-powered chatbot tools.</p>
+      <p>Holder of a <strong>WES-evaluated MBA (Finance &amp; Marketing)</strong>, recognized as a Canadian Master's equivalent, plus two graduate certificates from St. Lawrence College in Project Management and Supply Chain Management.</p>
+      <p>Beyond work, I'm a committed <strong>community volunteer</strong> with 13+ years of sustained service in resource allocation and logistics coordination — demonstrating leadership, empathy, and long-term accountability.</p>
+    </div>
+    <div class="igrid rev">
+      <div class="iitem"><div class="ilabel">Location</div><div class="ival">Cornwall, Ontario, Canada</div></div>
+      <div class="iitem"><div class="ilabel">Phone</div><div class="ival">(613) 861-5147</div></div>
+      <div class="iitem"><div class="ilabel">Email</div><div class="ival"><a href="mailto:kartikjoshi0999@gmail.com">kartikjoshi0999@gmail.com</a></div></div>
+      <div class="iitem"><div class="ilabel">LinkedIn</div><div class="ival"><a href="https://linkedin.com/in/kartikjoshi09" target="_blank">linkedin.com/in/kartikjoshi09</a></div></div>
+      <div class="iitem"><div class="ilabel">GitHub</div><div class="ival"><a href="https://github.com/kartikjoshi0999-ops" target="_blank">kartikjoshi0999-ops</a></div></div>
+      <div class="iitem"><div class="ilabel">Languages</div><div class="ival">English · Hindi · Punjabi · Gujarati</div></div>
+      <div class="iitem" style="grid-column:1/-1"><div class="ilabel">Education</div><div class="ival">MBA Finance &amp; Marketing · WES Canadian Master's Equivalent · 2 Graduate Certificates (St. Lawrence College)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="slabel rev">Core Competencies</div>
+  <h2 class="stitle rev">Skills &amp; Expertise</h2>
+  <div class="divl rev"></div>
+  <div class="sk2">
+    <div class="rev">
+      <div class="sktit">Finance &amp; Banking</div>
+      <div class="sbars">
+        <div data-p="95" data-c="#C9A84C"><div class="sbh"><span class="sbn">AML / KYC / FINTRAC Compliance</span><span class="sbp">95%</span></div><div class="sbtrack"><div class="sbfill" style="background:#C9A84C"></div></div></div>
+        <div data-p="92" data-c="#00B4A6"><div class="sbh"><span class="sbn">Financial Analysis &amp; Reporting</span><span class="sbp">92%</span></div><div class="sbtrack"><div class="sbfill" style="background:#00B4A6"></div></div></div>
+        <div data-p="90" data-c="#9B89D4"><div class="sbh"><span class="sbn">Portfolio &amp; Wealth Management</span><span class="sbp">90%</span></div><div class="sbtrack"><div class="sbfill" style="background:#9B89D4"></div></div></div>
+        <div data-p="88" data-c="#E8635A"><div class="sbh"><span class="sbn">Risk Management &amp; Audit</span><span class="sbp">88%</span></div><div class="sbtrack"><div class="sbfill" style="background:#E8635A"></div></div></div>
+        <div data-p="85" data-c="#2ECC71"><div class="sbh"><span class="sbn">Financial Modeling &amp; Valuation</span><span class="sbp">85%</span></div><div class="sbtrack"><div class="sbfill" style="background:#2ECC71"></div></div></div>
+        <div data-p="87" data-c="#3BAFDA"><div class="sbh"><span class="sbn">Accounts Payable / Receivable</span><span class="sbp">87%</span></div><div class="sbtrack"><div class="sbfill" style="background:#3BAFDA"></div></div></div>
+      </div>
+      <div class="sktit">Technology &amp; Tools</div>
+      <div class="sbars">
+        <div data-p="88" data-c="#3BAFDA"><div class="sbh"><span class="sbn">SAP ERP &amp; Advanced Excel / VBA</span><span class="sbp">88%</span></div><div class="sbtrack"><div class="sbfill" style="background:#3BAFDA"></div></div></div>
+        <div data-p="80" data-c="#9B89D4"><div class="sbh"><span class="sbn">React.js / REST APIs / Git</span><span class="sbp">80%</span></div><div class="sbtrack"><div class="sbfill" style="background:#9B89D4"></div></div></div>
+        <div data-p="82" data-c="#C9A84C"><div class="sbh"><span class="sbn">Data Visualization (Power BI / Recharts)</span><span class="sbp">82%</span></div><div class="sbtrack"><div class="sbfill" style="background:#C9A84C"></div></div></div>
+        <div data-p="75" data-c="#00B4A6"><div class="sbh"><span class="sbn">AI Tools Integration &amp; Prompting</span><span class="sbp">75%</span></div><div class="sbtrack"><div class="sbfill" style="background:#00B4A6"></div></div></div>
+      </div>
+    </div>
+    <div class="rev">
+      <div class="sktit">Management &amp; Leadership</div>
+      <div class="chips" style="margin-bottom:28px">
+        <span class="chip">Project &amp; Operations Management</span><span class="chip">Supply Chain Management</span>
+        <span class="chip">Stakeholder Management</span><span class="chip">Cross-functional Collaboration</span>
+        <span class="chip">Process Improvement &amp; Lean</span><span class="chip">Regulatory &amp; Policy Compliance</span>
+        <span class="chip">Training &amp; Coaching</span><span class="chip">Budgeting &amp; Variance Analysis</span>
+        <span class="chip">Capital Markets &amp; Investments</span><span class="chip">Month-End Close &amp; Reconciliation</span>
+      </div>
+      <div class="sktit">Soft Skills</div>
+      <div class="chips">
+        <span class="chip">Communication &amp; Presentation</span><span class="chip">Critical Thinking</span>
+        <span class="chip">Adaptability &amp; Flexibility</span><span class="chip">Leadership &amp; Initiative</span>
+        <span class="chip">Negotiation</span><span class="chip">Time Management</span>
+        <span class="chip">Attention to Detail</span><span class="chip">Continuous Learning</span>
+        <span class="chip">Emotional Intelligence</span><span class="chip">Decision-Making Under Pressure</span>
+        <span class="chip">Customer Service Orientation</span><span class="chip">Conflict Resolution</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="slabel rev">Career Journey</div>
+  <h2 class="stitle rev">Work Experience</h2>
+  <div class="divl rev"></div>
+  <div class="expgrid">
+    <div class="tl rev">
+      <div class="titem">
+        <div class="tdot" style="border-color:var(--gold);background:var(--gold)"></div>
+        <div class="tperiod">Feb 2024 – Feb 2026</div>
+        <div class="trole">Personal Banker</div>
+        <div class="torg">🏦 Bank of Montreal (BMO) · Ingleside, ON</div>
+        <ul class="tpts">
+          <li>Managed and grew retail banking portfolio through comprehensive financial needs assessments; delivered tailored product recommendations</li>
+          <li>Maintained strict AML/KYC/FINTRAC compliance during client onboarding, transaction monitoring, and account documentation</li>
+          <li>Drove client growth through proactive relationship management, needs-based advisory, and referral generation</li>
+        </ul>
+      </div>
+      <div class="titem">
+        <div class="tdot" style="border-color:var(--teal)"></div>
+        <div class="tperiod">May 2024 – Jan 2025</div>
+        <div class="trole">Front Desk Concierge</div>
+        <div class="torg">🏨 Super 8 by Wyndham · Cornwall, ON</div>
+        <ul class="tpts">
+          <li>Managed reservations, check-in/out, and escalation resolution; maintained high guest satisfaction KPIs</li>
+          <li>Maintained accurate cash controls, daily financial reconciliations, and secure payment processing</li>
+        </ul>
+      </div>
+      <div class="titem">
+        <div class="tdot" style="border-color:var(--lav)"></div>
+        <div class="tperiod">Jul 2023 – Nov 2023</div>
+        <div class="trole">Customer Service Representative</div>
+        <div class="torg">📱 Virgin Plus · Cornwall, ON</div>
+        <ul class="tpts">
+          <li>Managed end-to-end customer lifecycle — onboarding, billing, CRM data maintenance — in strict compliance with data privacy standards</li>
+          <li>Resolved complex escalations via root-cause analysis; consistently achieved high CSAT scores</li>
+        </ul>
+      </div>
+      <div class="titem">
+        <div class="tdot" style="border-color:var(--coral)"></div>
+        <div class="tperiod">Oct 2022 – Jul 2023</div>
+        <div class="trole">Electronics &amp; Sales Associate</div>
+        <div class="torg">🛒 OSL Retail Services · Cornwall, ON</div>
+        <ul class="tpts">
+          <li>Maintained inventory through cycle counts and audits; processed orders and managed returns to maximize retail productivity</li>
+          <li>Advised customers on electronics and photo products; drove upsell opportunities</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl rev">
+      <div class="titem">
+        <div class="tdot" style="border-color:var(--sky)"></div>
+        <div class="tperiod">Jun 2021 – Jul 2022</div>
+        <div class="trole">Payments Processing Analyst</div>
+        <div class="torg">🏛 Deutsche Bank · Jaipur, India</div>
+        <ul class="tpts">
+          <li>Ensured accuracy across high-volume cross-border payment queues; maintained strict SLA adherence and completed daily EOD reconciliation</li>
+          <li>Updated SOPs and compliance training records supporting regulatory audits</li>
+        </ul>
+      </div>
+      <div class="titem">
+        <div class="tdot" style="border-color:var(--green)"></div>
+        <div class="tperiod">Nov 2020 – May 2021 · Sep–Dec 2019</div>
+        <div class="trole">Financial Analyst</div>
+        <div class="torg">🏛 Deutsche Bank · Jaipur, India</div>
+        <ul class="tpts">
+          <li>Delivered audit positions on large-scale transaction portfolios; verified trade details across core banking systems ensuring full regulatory compliance</li>
+          <li>Managed trade ticket requests; coordinated processing workflows ensuring timely settlement</li>
+        </ul>
+      </div>
+      <div class="titem">
+        <div class="tdot" style="border-color:var(--gold)"></div>
+        <div class="tperiod">Dec 2019 – Mar 2020</div>
+        <div class="trole">Accounts Executive</div>
+        <div class="torg">👁 Lenskart.com · Faridabad, India</div>
+        <ul class="tpts">
+          <li>Managed full-cycle accounts payable and receivable; cleared invoices, executed month-end journal entries with 100% accuracy</li>
+          <li>Maintained daily ledger reconciliation; resolved discrepancies for smooth financial close cycles</li>
+        </ul>
+      </div>
+      <div class="titem">
+        <div class="tdot" style="border-color:var(--lav)"></div>
+        <div class="tperiod">May 2009 – Jul 2022</div>
+        <div class="trole">Volunteer — Resource Allocation Coordinator</div>
+        <div class="torg">🤝 Parmarth Avam Adhyatmik Samiti · Jaipur</div>
+        <ul class="tpts">
+          <li>13+ years coordinating resource allocation and logistics for essential supply delivery to underserved communities</li>
+          <li>Collaborated with government and NGO partners to execute large-scale social welfare programs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="slabel rev">Featured Work</div>
+  <h2 class="stitle rev">Key Projects</h2>
+  <div class="divl rev"></div>
+  <div class="pgrid rev">
+    <div class="pcard">
+      <div class="pico">⚡</div>
+      <div class="pname">FinPulse — AI-Assisted Financial Analytics Dashboard</div>
+      <p class="pdesc">A production-grade React.js financial analytics web app built and deployed independently. Features live market data, AI-powered chatbot interface (Claude, GPT-4, Gemini APIs) for financial Q&amp;A, Canadian TFSA/RRSP calculators, portfolio tracker, forex monitoring, and cryptocurrency data — all in interactive Recharts dashboards. Deployed on Vercel with CI/CD.</p>
+      <div class="ttags">
+        <span class="ttag">React.js</span><span class="ttag">REST APIs</span><span class="ttag">Recharts</span>
+        <span class="ttag">Claude API</span><span class="ttag">GPT-4 API</span><span class="ttag">Gemini API</span>
+        <span class="ttag">Vercel CI/CD</span><span class="ttag">Git / GitHub</span>
+      </div>
+      <div class="plinks">
+        <a href="https://finpulse-eight.vercel.app" class="plink" target="_blank">🔗 Live App</a>
+        <a href="https://github.com/kartikjoshi0999-ops/finpulse" class="plink" target="_blank">📦 Source Code</a>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pico">📊</div>
+      <div class="pname">Financial Modeling &amp; Analytics Portfolio</div>
+      <p class="pdesc">A collection of financial analysis and modeling projects: FMVA-level financial models, budgeting tools, scenario and what-if analysis dashboards, and data visualization work. Built using Excel/VBA, Power BI, and SAP ERP — showcasing skills applied throughout my banking and finance career.</p>
+      <div class="ttags">
+        <span class="ttag">Excel / VBA</span><span class="ttag">Financial Modeling</span>
+        <span class="ttag">Power BI</span><span class="ttag">SAP ERP</span><span class="ttag">Scenario Analysis</span>
+      </div>
+      <div class="plinks">
+        <a href="https://github.com/kartikjoshi0999-ops" class="plink" target="_blank">📦 GitHub Profile</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="slabel rev">Academic Background</div>
+  <h2 class="stitle rev">Education</h2>
+  <div class="divl rev"></div>
+  <div class="egrid rev">
+    <div class="ecard" style="border-top:3px solid var(--gold)">
+      <div class="edeg">Master of Business Administration</div><div class="efi">Finance &amp; Marketing</div>
+      <div class="esch">R.A. Podar Institute of Management, Jaipur</div><div class="eyr">May 2019</div>
+      <span class="ewes">WES: Canadian Master's Equivalent</span>
+    </div>
+    <div class="ecard" style="border-top:3px solid var(--teal)">
+      <div class="edeg">Bachelor of Business Administration</div><div class="efi">Finance &amp; Marketing</div>
+      <div class="esch">S.S. Jain Subodh P.G. College, Jaipur</div><div class="eyr">May 2017</div>
+      <span class="ewes">WES: Canadian Bachelor's Equivalent</span>
+    </div>
+    <div class="ecard" style="border-top:3px solid var(--lav)">
+      <div class="edeg">Graduate Certificate</div><div class="efi">Project Management</div>
+      <div class="esch">St. Lawrence College, Cornwall, ON</div><div class="eyr">December 2023</div>
+    </div>
+    <div class="ecard" style="border-top:3px solid var(--coral)">
+      <div class="edeg">Graduate Certificate</div><div class="efi">Supply Chain Management</div>
+      <div class="esch">St. Lawrence College, Cornwall, ON</div><div class="eyr">April 2023</div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="slabel rev">Professional Development</div>
+  <h2 class="stitle rev">Certifications &amp; Credentials</h2>
+  <div class="divl rev"></div>
+  <p class="ssub rev">Comprehensive professional certifications spanning finance, banking, AI tools, project management, and leadership.</p>
+  <div class="ccats rev">
+    <button class="ccbtn on" data-f="all">All (30+)</button>
+    <button class="ccbtn" data-f="finance">Finance &amp; Banking</button>
+    <button class="ccbtn" data-f="ai">AI &amp; Technology</button>
+    <button class="ccbtn" data-f="pm">Project Management</button>
+    <button class="ccbtn" data-f="lead">Leadership</button>
+    <button class="ccbtn" data-f="cx">Customer Service</button>
+  </div>
+  <div class="cgrid">
+    <div class="ccard" data-cat="finance"><div class="xico" style="background:rgba(201,168,76,.13)">💰</div><div><div class="cname">Canadian Investment Funds Course (Mutual Funds)</div><div class="ciss">IFSE Institute</div></div></div>
+    <div class="ccard" data-cat="finance"><div class="xico" style="background:rgba(201,168,76,.13)">🏦</div><div><div class="cname">Commercial Banking &amp; Credit Analyst (CBCA®)</div><div class="ciss">Corporate Finance Institute (CFI)</div></div></div>
+    <div class="ccard" data-cat="finance"><div class="xico" style="background:rgba(201,168,76,.13)">📈</div><div><div class="cname">Financial Modeling &amp; Valuation Analyst (FMVA®)</div><div class="ciss">Corporate Finance Institute (CFI)</div></div></div>
+    <div class="ccard" data-cat="finance"><div class="xico" style="background:rgba(201,168,76,.13)">📊</div><div><div class="cname">Financial Planning &amp; Analysis Professional (FPAP™)</div><div class="ciss">Corporate Finance Institute (CFI)</div></div></div>
+    <div class="ccard" data-cat="finance"><div class="xico" style="background:rgba(59,175,218,.13)">🎓</div><div><div class="cname">Fundamentals of Finance</div><div class="ciss">University of Pennsylvania</div></div></div>
+    <div class="ccard" data-cat="finance"><div class="xico" style="background:rgba(59,175,218,.13)">💼</div><div><div class="cname">Personal Finance Essentials</div><div class="ciss">McGill University, Desautels Faculty of Management</div></div></div>
+    <div class="ccard" data-cat="finance"><div class="xico" style="background:rgba(59,175,218,.13)">📉</div><div><div class="cname">Introduction to Capital Markets</div><div class="ciss">Corporate Finance Institute</div></div></div>
+    <div class="ccard" data-cat="finance"><div class="xico" style="background:rgba(59,175,218,.13)">🖩</div><div><div class="cname">Certificate in Introduction to Financial Modeling</div><div class="ciss">Udemy</div></div></div>
+    <div class="ccard" data-cat="finance"><div class="xico" style="background:rgba(59,175,218,.13)">📋</div><div><div class="cname">Certificate in Sensex SREST (Mock Sensex)</div><div class="ciss">Capital Markets Program</div></div></div>
+    <div class="ccard" data-cat="ai"><div class="xico" style="background:rgba(155,137,212,.13)">🤖</div><div><div class="cname">IBM RAG and Agentic AI Professional Certificate</div><div class="ciss">IBM</div></div></div>
+    <div class="ccard" data-cat="ai"><div class="xico" style="background:rgba(155,137,212,.13)">🔍</div><div><div class="cname">Google AI Essentials Specialization</div><div class="ciss">Google</div></div></div>
+    <div class="ccard" data-cat="ai"><div class="xico" style="background:rgba(155,137,212,.13)">🛡️</div><div><div class="cname">Use AI Responsibly</div><div class="ciss">Google</div></div></div>
+    <div class="ccard" data-cat="ai"><div class="xico" style="background:rgba(155,137,212,.13)">✏️</div><div><div class="cname">Microsoft Copilot: The Art of Prompt Writing</div><div class="ciss">LinkedIn Learning</div></div></div>
+    <div class="ccard" data-cat="ai"><div class="xico" style="background:rgba(155,137,212,.13)">⚡</div><div><div class="cname">How to Boost Your Productivity with AI Tools</div><div class="ciss">Project Management Institute (PMI)</div></div></div>
+    <div class="ccard" data-cat="ai"><div class="xico" style="background:rgba(155,137,212,.13)">🔐</div><div><div class="cname">Artificial Intelligence for Cybersecurity</div><div class="ciss">Project Management Institute (PMI)</div></div></div>
+    <div class="ccard" data-cat="pm"><div class="xico" style="background:rgba(46,204,113,.13)">🌀</div><div><div class="cname">Certificate in Agile Foundations</div><div class="ciss">Project Management Institute (PMI)</div></div></div>
+    <div class="ccard" data-cat="pm"><div class="xico" style="background:rgba(46,204,113,.13)">🗺️</div><div><div class="cname">Build Successful Career in Project Management</div><div class="ciss">Project Management Institute (PMI)</div></div></div>
+    <div class="ccard" data-cat="pm"><div class="xico" style="background:rgba(46,204,113,.13)">🏆</div><div><div class="cname">CX Foundations (Customer Experience)</div><div class="ciss">Project Management Institute (PMI)</div></div></div>
+    <div class="ccard" data-cat="lead"><div class="xico" style="background:rgba(232,99,90,.13)">❤️</div><div><div class="cname">Emotional Intelligence for Project Managers</div><div class="ciss">Project Management Institute (PMI)</div></div></div>
+    <div class="ccard" data-cat="lead"><div class="xico" style="background:rgba(232,99,90,.13)">🧠</div><div><div class="cname">Developing Your Emotional Intelligence</div><div class="ciss">Project Management Institute (PMI)</div></div></div>
+    <div class="ccard" data-cat="lead"><div class="xico" style="background:rgba(232,99,90,.13)">🎤</div><div><div class="cname">Public Speaking Foundations</div><div class="ciss">NASBA</div></div></div>
+    <div class="ccard" data-cat="cx"><div class="xico" style="background:rgba(0,180,166,.13)">💬</div><div><div class="cname">Customer Service: Managing Customer Feedback</div><div class="ciss">Project Management Institute (PMI)</div></div></div>
+    <div class="ccard" data-cat="cx"><div class="xico" style="background:rgba(0,180,166,.13)">🤝</div><div><div class="cname">Building Rapport with Customers</div><div class="ciss">NASBA</div></div></div>
+  </div>
+</section>
+
+<!-- REFERENCES -->
+<section id="references">
+  <div class="slabel rev">Professional Network</div>
+  <h2 class="stitle rev">References</h2>
+  <div class="divl rev"></div>
+  <div class="rgrid rev">
+    <div class="rcard"><div class="rname">Thomas Reed</div><div class="rrole">Branch Manager</div><div class="rorg">Bank of Montreal (BMO) · Ingleside, ON<br><span style="color:var(--gold)">📞 613-551-8217</span></div></div>
+    <div class="rcard"><div class="rname">Mohammad Alsharqawi, PhD, PMP</div><div class="rrole">Assistant Professor</div><div class="rorg">California State University · Project Management Professor, St. Lawrence College</div></div>
+    <div class="rcard"><div class="rname">Oday Aswad, PhD, DBA, MBA, PMP</div><div class="rrole">Lean Six-Sigma Black Belt · Professor</div><div class="rorg">University of Ottawa &amp; St. Lawrence College · Supply Chain &amp; Project Management</div></div>
+    <div class="rcard"><div class="rname">Majed Mouazen</div><div class="rrole">Professor · Project Management</div><div class="rorg">St. Lawrence College · Cornwall, ON</div></div>
+    <div class="rcard"><div class="rname">Peter Collins</div><div class="rrole">Professor · Supply Chain &amp; Project Management</div><div class="rorg">St. Lawrence College · Cornwall, ON</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="slabel rev">Get In Touch</div>
+  <h2 class="stitle rev">Ready to Connect?</h2>
+  <div class="divl rev" style="margin:14px auto 20px"></div>
+  <p style="color:var(--muted);max-width:500px;margin:0 auto;font-size:.93rem;line-height:1.7" class="rev">Whether you're looking for a financial analyst, banking professional, or someone who embraces AI tools to enhance financial work — I'd love a conversation.</p>
+  <div class="clinks rev">
+    <a href="mailto:kartikjoshi0999@gmail.com" class="clink">📧 kartikjoshi0999@gmail.com</a>
+    <a href="tel:6138615147" class="clink">📞 (613) 861-5147</a>
+    <a href="https://linkedin.com/in/kartikjoshi09" class="clink" target="_blank">💼 LinkedIn</a>
+    <a href="https://github.com/kartikjoshi0999-ops" class="clink" target="_blank">🐙 GitHub</a>
+    <a href="https://finpulse-eight.vercel.app" class="clink" target="_blank">⚡ FinPulse App</a>
+  </div>
+  <p style="color:var(--muted);font-size:.78rem;margin-top:20px" class="rev">📍 Cornwall, Ontario, Canada · Open to opportunities across Ontario</p>
+</section>
+
+<footer><p>© 2025 Kartik Joshi · Financial Analyst &amp; Banking Professional · Cornwall, Ontario · 🔒 Private Portfolio</p></footer>
+
+</div>
+
+<script>
+// ── PASSCODE (change KJ2025 to your own) ──
+var PASS='KJ2025', tries=0;
+
+function doUnlock(){
+  var v=document.getElementById('li').value.trim().toUpperCase();
+  var e=document.getElementById('le');
+  if(v===PASS.toUpperCase()){
+    document.getElementById('lock').style.display='none';
+    document.getElementById('site').style.display='block';
+    sessionStorage.setItem('kju','1');
+    startSite();
+  } else {
+    tries++;
+    document.getElementById('li').value='';
+    document.getElementById('li').style.borderColor='#E8635A';
+    setTimeout(function(){document.getElementById('li').style.borderColor='';},1200);
+    if(tries>=5){
+      e.textContent='Too many attempts. Refresh to try again.';
+      document.getElementById('lbtn').disabled=true;
+      document.getElementById('li').disabled=true;
+    } else {
+      e.textContent='Wrong code. '+(5-tries)+' attempt'+(5-tries===1?'':'s')+' left.';
+    }
+  }
+}
+
+document.getElementById('lbtn').addEventListener('click',doUnlock);
+document.getElementById('li').addEventListener('keydown',function(e){if(e.key==='Enter')doUnlock();});
+document.getElementById('lockbtn').addEventListener('click',function(){
+  sessionStorage.removeItem('kju');
+  document.getElementById('site').style.display='none';
+  document.getElementById('lock').style.display='flex';
+  document.getElementById('li').value='';
+  document.getElementById('le').textContent='';
+  tries=0;
+});
+if(sessionStorage.getItem('kju')){
+  document.getElementById('lock').style.display='none';
+  document.getElementById('site').style.display='block';
+  startSite();
+}
+
+// ── NAV (using unique IDs, NOT scrollTo to avoid browser conflict) ──
+var navIds=['about','skills','experience','projects','education','certifications','references','contact'];
+for(var i=0;i<navIds.length;i++){
+  (function(id){
+    var btn=document.getElementById('n'+navIds.indexOf(id));
+    if(btn) btn.addEventListener('click',function(){
+      var el=document.getElementById(id);
+      if(el) window.scrollTo({top:el.offsetTop-60,behavior:'smooth'});
+    });
+  })(navIds[i]);
+}
+document.getElementById('nb').addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+document.getElementById('hexp').addEventListener('click',function(){
+  var el=document.getElementById('experience');
+  if(el) window.scrollTo({top:el.offsetTop-60,behavior:'smooth'});
+});
+document.getElementById('hcon').addEventListener('click',function(){
+  var el=document.getElementById('contact');
+  if(el) window.scrollTo({top:el.offsetTop-60,behavior:'smooth'});
+});
+
+// ── CERT FILTER ──
+document.querySelectorAll('.ccbtn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.ccbtn').forEach(function(b){b.classList.remove('on');});
+    btn.classList.add('on');
+    var f=btn.getAttribute('data-f');
+    document.querySelectorAll('.ccard').forEach(function(c){
+      if(f==='all'||c.getAttribute('data-cat')===f){c.classList.remove('hide');}
+      else{c.classList.add('hide');}
+    });
+  });
+});
+
+// ── INIT (scroll reveal + skill bars) ──
+function startSite(){
+  // Reveal on scroll
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('on');
+        e.target.querySelectorAll('[data-p]').forEach(function(row){
+          var fill=row.querySelector('.sbfill');
+          var pct=row.getAttribute('data-p');
+          if(fill&&pct) setTimeout(function(){fill.style.width=pct+'%';},300);
+        });
+      }
+    });
+  },{threshold:0.1});
+  document.querySelectorAll('.rev').forEach(function(el){obs.observe(el);});
+
+  // Trigger bars that are already visible
+  setTimeout(function(){
+    document.querySelectorAll('[data-p]').forEach(function(row){
+      var fill=row.querySelector('.sbfill');
+      var pct=row.getAttribute('data-p');
+      if(fill&&pct&&fill.style.width===''){fill.style.width=pct+'%';}
+    });
+  },800);
+
+  // Active nav on scroll
+  window.addEventListener('scroll',function(){
+    var cur='';
+    navIds.forEach(function(id){
+      var el=document.getElementById(id);
+      if(el&&window.scrollY>=el.offsetTop-100) cur=id;
+    });
+    for(var i=0;i<navIds.length;i++){
+      var btn=document.getElementById('n'+i);
+      if(btn) btn.style.color=(navIds[i]===cur)?'#C9A84C':'';
+    }
+  });
+}
+</script>
+</body>
+</html>
