@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StatLens — Financial Statistics Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --navy:#0A1628;--mid:#0D1F3C;--gold:#C9A84C;--amber:#F5A623;
+  --teal:#00B4A6;--coral:#E8635A;--lav:#9B89D4;--green:#2ECC71;
+  --sky:#3BAFDA;--text:#E8E4DA;--muted:#8A97AB;
+  --card:rgba(255,255,255,0.04);--cb:rgba(255,255,255,0.08);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);overflow-x:hidden;line-height:1.6;min-height:100vh}
+
+/* TOP BAR */
+header{position:sticky;top:0;z-index:100;padding:0 40px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,22,40,.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.07)}
+.brand{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--gold)}
+.brand span{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--teal);margin-left:10px;letter-spacing:.15em}
+.backbtn{font-size:.75rem;color:var(--muted);text-decoration:none;
+  border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:5px 14px;transition:all .2s}
+.backbtn:hover{color:var(--gold);border-color:rgba(201,168,76,.4)}
+
+/* LAYOUT */
+.wrap{max-width:1200px;margin:0 auto;padding:36px 24px 60px}
+h1.pg{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);
+  font-weight:700;line-height:1.2;margin-bottom:8px}
+.pg-sub{color:var(--muted);font-size:.88rem;margin-bottom:36px;max-width:680px;line-height:1.6}
+.badge-free{display:inline-block;padding:3px 10px;border-radius:100px;
+  font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  background:rgba(46,204,113,.12);border:1px solid rgba(46,204,113,.3);color:var(--green);margin-right:8px}
+
+/* INPUT PANEL */
+.input-panel{background:var(--card);border:1px solid var(--cb);border-radius:16px;padding:28px;margin-bottom:28px}
+.input-panel h3{font-size:.75rem;font-weight:600;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+.input-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+textarea{width:100%;height:90px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;color:var(--text);font-size:.83rem;font-family:'DM Mono',monospace;
+  padding:12px 14px;resize:vertical;outline:none;transition:border-color .2s;line-height:1.55}
+textarea:focus{border-color:var(--teal)}
+textarea::placeholder{color:var(--muted)}
+.input-controls{display:flex;flex-direction:column;gap:10px;min-width:200px}
+.inp-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini-label{font-size:.65rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+input[type=number]{width:100%;padding:9px 12px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--text);
+  font-size:.8rem;font-family:'DM Mono',monospace;outline:none;transition:border-color .2s}
+input[type=number]:focus{border-color:var(--teal)}
+select{width:100%;padding:9px 12px;background:rgba(13,31,60,.9);
+  border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--text);
+  font-size:.8rem;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer}
+.calcbtn{padding:11px 22px;background:linear-gradient(135deg,var(--gold),var(--amber));
+  color:var(--navy);border:none;border-radius:9px;font-family:'DM Sans',sans-serif;
+  font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.calcbtn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,168,76,.3)}
+.clearbtn{padding:9px;background:transparent;border:1px solid rgba(255,255,255,.1);
+  border-radius:9px;color:var(--muted);font-size:.78rem;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.clearbtn:hover{border-color:var(--coral);color:var(--coral)}
+.sample-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.sample-btn{padding:4px 11px;font-size:.7rem;border:1px solid rgba(255,255,255,.1);border-radius:100px;
+  background:transparent;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.sample-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+/* RESULTS */
+#results{display:none}
+.section-title{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--teal);
+  letter-spacing:.22em;text-transform:uppercase;margin-bottom:14px;margin-top:32px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:8px}
+.stat-card{background:var(--card);border:1px solid var(--cb);border-radius:12px;padding:18px 20px;
+  transition:border-color .2s;position:relative}
+.stat-card:hover{border-color:rgba(201,168,76,.3)}
+.stat-label{font-size:.64rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.stat-val{font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:500;color:var(--text);line-height:1.2}
+.stat-sub{font-size:.67rem;color:var(--muted);margin-top:3px}
+.accent-g{color:var(--gold)}
+.accent-t{color:var(--teal)}
+.accent-l{color:var(--lav)}
+.accent-c{color:var(--coral)}
+.accent-gr{color:var(--green)}
+.accent-s{color:var(--sky)}
+
+/* CHART AREA */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:4px}
+.chart-box{background:var(--card);border:1px solid var(--cb);border-radius:14px;padding:22px;position:relative}
+.chart-box h4{font-size:.72rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+canvas{display:block;width:100%;border-radius:6px}
+
+/* FINANCIAL PANEL */
+.fin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.fin-card{background:var(--card);border:1px solid var(--cb);border-radius:12px;padding:18px 20px}
+.fin-label{font-size:.64rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.fin-val{font-family:'DM Mono',monospace;font-size:1.15rem;font-weight:500;line-height:1.2}
+.fin-sub{font-size:.67rem;color:var(--muted);margin-top:3px}
+
+/* CORRELATION PANEL */
+.corr-panel{background:var(--card);border:1px solid var(--cb);border-radius:16px;padding:28px;margin-top:28px}
+.corr-panel h3{font-size:.75rem;font-weight:600;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+.corr-row{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end}
+.corr-result{margin-top:18px;display:none}
+.corr-num{font-family:'DM Mono',monospace;font-size:2rem;font-weight:500}
+.corr-interp{font-size:.82rem;color:var(--muted);margin-top:6px}
+.corr-bar-wrap{height:8px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;margin-top:10px;position:relative}
+.corr-bar{height:100%;border-radius:100px;transition:width .6s ease}
+
+/* INTERPRETATION BOX */
+.interp-box{background:rgba(0,180,166,.06);border:1px solid rgba(0,180,166,.2);
+  border-radius:12px;padding:18px 22px;margin-top:20px;font-size:.84rem;color:var(--muted);line-height:1.7}
+.interp-box strong{color:var(--text)}
+
+/* EXPORT */
+.export-row{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.expbtn{padding:9px 18px;border:1px solid rgba(255,255,255,.1);border-radius:8px;
+  background:transparent;color:var(--muted);font-size:.78rem;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all .2s}
+.expbtn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ERROR */
+.err{background:rgba(232,99,90,.1);border:1px solid rgba(232,99,90,.3);
+  color:var(--coral);border-radius:10px;padding:12px 16px;font-size:.82rem;margin-top:14px;display:none}
+
+@media(max-width:760px){
+  header{padding:0 16px}
+  .wrap{padding:24px 14px 48px}
+  .input-row{grid-template-columns:1fr}
+  .charts-row{grid-template-columns:1fr}
+  .corr-row{grid-template-columns:1fr}
+  .inp-meta{grid-template-columns:1fr}
+}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,.3);border-radius:3px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">StatLens <span>FINANCIAL STATISTICS</span></div>
+  <a href="index.html" class="backbtn">← Back to Portfolio</a>
+</header>
+
+<div class="wrap">
+  <p style="font-family:'DM Mono',monospace;font-size:.68rem;color:var(--teal);letter-spacing:.22em;text-transform:uppercase;margin-bottom:10px">Free · No API · Browser-Only</p>
+  <h1 class="pg">Financial Statistics Calculator</h1>
+  <p class="pg-sub">
+    <span class="badge-free">100% Free</span>
+    Paste a series of numbers — returns, prices, expenses — and instantly compute descriptive statistics, financial risk metrics (Sharpe ratio, max drawdown, VaR), and interactive histograms. Zero cost, zero API calls, fully private.
+  </p>
+
+  <!-- INPUT PANEL -->
+  <div class="input-panel">
+    <h3>Data Input</h3>
+    <div class="input-row">
+      <div>
+        <textarea id="dataInput" placeholder="Enter numbers separated by commas, spaces, or new lines&#10;Example: 2.1, -0.5, 3.4, 1.2, -1.8, 0.9, 2.7, -0.3, 1.5, 0.8"></textarea>
+        <div class="err" id="errBox"></div>
+        <div class="sample-row">
+          <span style="font-size:.68rem;color:var(--muted);align-self:center">Samples:</span>
+          <button class="sample-btn" onclick="loadSample('returns')">Monthly Returns</button>
+          <button class="sample-btn" onclick="loadSample('prices')">Stock Prices</button>
+          <button class="sample-btn" onclick="loadSample('costs')">Project Costs</button>
+          <button class="sample-btn" onclick="loadSample('portfolio')">Portfolio Weights</button>
+        </div>
+      </div>
+      <div class="input-controls">
+        <div class="inp-meta">
+          <div>
+            <div class="mini-label">Frequency</div>
+            <select id="freq">
+              <option value="12">Monthly</option>
+              <option value="52">Weekly</option>
+              <option value="252">Daily</option>
+              <option value="4">Quarterly</option>
+              <option value="1">Annual</option>
+            </select>
+          </div>
+          <div>
+            <div class="mini-label">Risk-Free Rate (%/yr)</div>
+            <input type="number" id="rfr" value="4.5" step="0.1" min="0" max="20">
+          </div>
+          <div>
+            <div class="mini-label">Confidence Level</div>
+            <select id="confLevel">
+              <option value="0.95">95%</option>
+              <option value="0.99">99%</option>
+              <option value="0.90">90%</option>
+            </select>
+          </div>
+          <div>
+            <div class="mini-label">Histogram Bins</div>
+            <input type="number" id="bins" value="10" step="1" min="3" max="50">
+          </div>
+        </div>
+        <button class="calcbtn" onclick="calculate()">Calculate →</button>
+        <button class="clearbtn" onclick="clearAll()">Clear Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+
+    <!-- DESCRIPTIVE STATS -->
+    <div class="section-title">Descriptive Statistics</div>
+    <div class="stats-grid" id="descGrid"></div>
+
+    <!-- CHARTS -->
+    <div class="section-title">Data Visualisation</div>
+    <div class="charts-row">
+      <div class="chart-box">
+        <h4>Histogram &amp; Normal Overlay</h4>
+        <canvas id="histChart" height="220"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>Box Plot</h4>
+        <canvas id="boxChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- FINANCIAL METRICS -->
+    <div class="section-title">Financial Risk Metrics</div>
+    <div class="fin-grid" id="finGrid"></div>
+
+    <!-- INTERPRETATION -->
+    <div class="interp-box" id="interpBox"></div>
+
+    <!-- EXPORT -->
+    <div class="export-row">
+      <button class="expbtn" onclick="exportCSV()">Export CSV</button>
+      <button class="expbtn" onclick="exportJSON()">Export JSON</button>
+      <button class="expbtn" onclick="copyReport()">Copy Report</button>
+    </div>
+  </div>
+
+  <!-- CORRELATION TOOL -->
+  <div class="corr-panel">
+    <h3>Correlation Calculator</h3>
+    <div class="corr-row">
+      <div>
+        <div class="mini-label">Series A</div>
+        <textarea id="corrA" style="height:70px" placeholder="1.2, -0.5, 2.1, 0.8, ..."></textarea>
+      </div>
+      <div>
+        <div class="mini-label">Series B</div>
+        <textarea id="corrB" style="height:70px" placeholder="0.9, -0.3, 1.8, 1.1, ..."></textarea>
+      </div>
+      <button class="calcbtn" style="margin-bottom:2px" onclick="calcCorr()">Correlate</button>
+    </div>
+    <div class="corr-result" id="corrResult">
+      <div class="stat-label" style="margin-top:14px">Pearson Correlation Coefficient (r)</div>
+      <div class="corr-num" id="corrVal"></div>
+      <div class="corr-bar-wrap"><div class="corr-bar" id="corrBar"></div></div>
+      <div class="corr-interp" id="corrInterp"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+//  SAMPLE DATA
+// ──────────────────────────────────────────────
+var SAMPLES = {
+  returns: "2.1, -0.5, 3.4, 1.2, -1.8, 0.9, 2.7, -0.3, 1.5, 0.8, -2.4, 1.9, 3.1, 0.4, -0.9, 2.2, 1.7, -1.2, 0.6, 2.9, -0.7, 1.4, 3.6, -0.2",
+  prices: "148.5, 151.2, 149.8, 153.4, 155.1, 152.6, 157.3, 160.0, 158.7, 162.4, 165.1, 163.8, 168.2, 171.5, 169.3, 174.0, 177.6, 175.2, 179.8, 183.1",
+  costs: "12400, 15600, 11800, 17200, 13500, 16900, 14200, 18500, 12900, 15100, 16700, 13800, 14900, 17600, 12100",
+  portfolio: "8.5, 12.3, -3.1, 6.7, 15.2, -1.8, 9.4, 11.0, -4.2, 7.8, 13.6, -2.5, 10.1, 14.4, -0.9, 5.3"
+};
+function loadSample(k) {
+  document.getElementById('dataInput').value = SAMPLES[k];
+  calculate();
+}
+function clearAll() {
+  document.getElementById('dataInput').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('errBox').style.display = 'none';
+}
+
+// ──────────────────────────────────────────────
+//  PARSE INPUT
+// ──────────────────────────────────────────────
+function parseData(raw) {
+  var nums = raw.split(/[\s,;\n\r]+/)
+    .map(function(s){return s.trim();})
+    .filter(function(s){return s !== '';})
+    .map(Number)
+    .filter(function(n){return !isNaN(n);});
+  return nums;
+}
+
+// ──────────────────────────────────────────────
+//  MATH HELPERS
+// ──────────────────────────────────────────────
+function mean(arr) {
+  return arr.reduce(function(a,b){return a+b;},0) / arr.length;
+}
+function variance(arr, pop) {
+  var m = mean(arr);
+  var ss = arr.reduce(function(a,b){return a + (b-m)*(b-m);},0);
+  return ss / (pop ? arr.length : arr.length - 1);
+}
+function stdDev(arr, pop) { return Math.sqrt(variance(arr, pop)); }
+function median(arr) {
+  var s = arr.slice().sort(function(a,b){return a-b;});
+  var n = s.length;
+  return n%2===0 ? (s[n/2-1]+s[n/2])/2 : s[Math.floor(n/2)];
+}
+function mode(arr) {
+  var freq = {};
+  arr.forEach(function(v){
+    var k = v.toFixed(4);
+    freq[k] = (freq[k]||0) + 1;
+  });
+  var max = Math.max.apply(null, Object.values(freq));
+  if(max === 1) return null;
+  var modes = Object.keys(freq).filter(function(k){return freq[k]===max;}).map(Number);
+  return modes.length <= 3 ? modes : null; // only show if reasonable
+}
+function percentile(arr, p) {
+  var s = arr.slice().sort(function(a,b){return a-b;});
+  var idx = (p/100) * (s.length - 1);
+  var lo = Math.floor(idx), hi = Math.ceil(idx);
+  if(lo === hi) return s[lo];
+  return s[lo] + (idx - lo) * (s[hi] - s[lo]);
+}
+function skewness(arr) {
+  var n = arr.length, m = mean(arr), s = stdDev(arr, false);
+  if(s === 0) return 0;
+  var sum = arr.reduce(function(a,b){return a + Math.pow((b-m)/s, 3);},0);
+  return (n / ((n-1)*(n-2))) * sum;
+}
+function kurtosis(arr) {
+  var n = arr.length, m = mean(arr), s = stdDev(arr, false);
+  if(s === 0) return 0;
+  var sum = arr.reduce(function(a,b){return a + Math.pow((b-m)/s, 4);},0);
+  var k = ((n*(n+1)) / ((n-1)*(n-2)*(n-3))) * sum;
+  var correction = (3*(n-1)*(n-1)) / ((n-2)*(n-3));
+  return k - correction; // excess kurtosis
+}
+function pearsonCorr(a, b) {
+  if(a.length !== b.length || a.length < 2) return NaN;
+  var ma = mean(a), mb = mean(b);
+  var num = a.reduce(function(s,v,i){return s + (v-ma)*(b[i]-mb);},0);
+  var da = Math.sqrt(a.reduce(function(s,v){return s+(v-ma)*(v-ma);},0));
+  var db = Math.sqrt(b.reduce(function(s,v){return s+(v-mb)*(v-mb);},0));
+  return (da===0||db===0) ? NaN : num/(da*db);
+}
+// Approximate inverse normal CDF (Abramowitz & Stegun)
+function invNorm(p) {
+  var a1=-39.6968302866538, a2=220.946098424521, a3=-275.928510446969,
+      a4=138.357751867269, a5=-30.6647980661472, a6=2.50662823884;
+  var b1=-54.4760987982241, b2=161.585836858804, b3=-155.698979859887,
+      b4=66.8013118293568, b5=-13.2806815528857;
+  var c1=-7.78489400243029E-3, c2=-0.322396458361990, c3=-2.40075827716184,
+      c4=-2.54973253934373, c5=4.37466414146497, c6=2.93816398269878;
+  var d1=7.78469570904146E-3, d2=0.32246712907004, d3=2.445134137143,
+      d4=3.75440866190742;
+  var p_low=0.02425, p_high=1-p_low, q, r;
+  if(p<p_low){q=Math.sqrt(-2*Math.log(p));
+    return (((((c1*q+c2)*q+c3)*q+c4)*q+c5)*q+c6) / ((((d1*q+d2)*q+d3)*q+d4)*q+1);}
+  if(p<=p_high){q=p-0.5;r=q*q;
+    return (((((a1*r+a2)*r+a3)*r+a4)*r+a5)*r+a6)*q / (((((b1*r+b2)*r+b3)*r+b4)*r+b5)*r+1);}
+  q=Math.sqrt(-2*Math.log(1-p));
+  return -(((((c1*q+c2)*q+c3)*q+c4)*q+c5)*q+c6) / ((((d1*q+d2)*q+d3)*q+d4)*q+1);
+}
+// Normal PDF
+function normalPDF(x, mu, sigma) {
+  return Math.exp(-0.5*Math.pow((x-mu)/sigma,2)) / (sigma*Math.sqrt(2*Math.PI));
+}
+// Max drawdown (from a cumulative return series)
+function maxDrawdown(returns) {
+  var peak = 1, val = 1, mdd = 0;
+  returns.forEach(function(r) {
+    val *= (1 + r/100);
+    if(val > peak) peak = val;
+    var dd = (peak - val) / peak;
+    if(dd > mdd) mdd = dd;
+  });
+  return mdd * 100;
+}
+// Sortino ratio
+function sortinoRatio(returns, rfPerPeriod) {
+  var excess = returns.map(function(r){return r - rfPerPeriod;});
+  var downside = excess.filter(function(r){return r < 0;});
+  if(downside.length < 2) return NaN;
+  var dsd = Math.sqrt(downside.reduce(function(s,r){return s+r*r;},0) / downside.length);
+  if(dsd === 0) return NaN;
+  return mean(excess) / dsd;
+}
+// CAGR from series of periodic returns
+function cagr(returns, periodsPerYear) {
+  var n = returns.length;
+  var totalGrowth = returns.reduce(function(p,r){return p*(1+r/100);},1);
+  return (Math.pow(totalGrowth, periodsPerYear/n) - 1) * 100;
+}
+
+// ──────────────────────────────────────────────
+//  FORMAT
+// ──────────────────────────────────────────────
+function fmt(n, dec) {
+  if(n === null || isNaN(n)) return 'N/A';
+  dec = dec === undefined ? 4 : dec;
+  return parseFloat(n.toFixed(dec)).toLocaleString('en-CA', {maximumFractionDigits: dec});
+}
+
+// ──────────────────────────────────────────────
+//  MAIN CALCULATE
+// ──────────────────────────────────────────────
+var lastStats = null;
+function calculate() {
+  var raw = document.getElementById('dataInput').value;
+  var errBox = document.getElementById('errBox');
+  var data = parseData(raw);
+
+  if(data.length < 3) {
+    errBox.textContent = 'Please enter at least 3 valid numbers.';
+    errBox.style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+    return;
+  }
+  errBox.style.display = 'none';
+
+  var freq = parseFloat(document.getElementById('freq').value);
+  var rfr  = parseFloat(document.getElementById('rfr').value) || 0;
+  var conf = parseFloat(document.getElementById('confLevel').value);
+  var binCount = Math.max(3, Math.min(50, parseInt(document.getElementById('bins').value) || 10));
+
+  var n = data.length;
+  var sorted = data.slice().sort(function(a,b){return a-b;});
+  var m = mean(data);
+  var med = median(data);
+  var mo = mode(data);
+  var sd = stdDev(data, false);
+  var sdp = stdDev(data, true);
+  var vari = variance(data, false);
+  var sk = skewness(data);
+  var kurt = kurtosis(data);
+  var cv = m !== 0 ? (sd / Math.abs(m)) * 100 : NaN;
+  var q1 = percentile(data, 25);
+  var q3 = percentile(data, 75);
+  var iqr = q3 - q1;
+  var minV = sorted[0], maxV = sorted[n-1];
+  var range = maxV - minV;
+
+  // Financial metrics
+  var rfPerPeriod = rfr / freq;
+  var annReturn = m * freq;
+  var annVol = sd * Math.sqrt(freq);
+  var sharpe = annVol !== 0 ? (annReturn - rfr) / annVol : NaN;
+  var mdd = maxDrawdown(data);
+  var sortino = sortinoRatio(data, rfPerPeriod) * Math.sqrt(freq);
+  var cagrVal = cagr(data, freq);
+  // VaR (parametric)
+  var zScore = -invNorm(1 - conf);
+  var varP = -(m + zScore * sd);
+  var cvarP = -(m - sd * normalPDF(zScore, 0, 1) / (1 - conf));
+  // Calmar ratio
+  var calmar = mdd !== 0 ? annReturn / mdd : NaN;
+
+  lastStats = {
+    n, data, sorted, m, med, mo, sd, sdp, vari, sk, kurt, cv,
+    q1, q3, iqr, minV, maxV, range,
+    annReturn, annVol, sharpe, mdd, sortino, cagrVal,
+    varP, cvarP, calmar, conf, freq, rfr, binCount
+  };
+
+  renderDescStats(lastStats);
+  renderHistogram(lastStats);
+  renderBoxPlot(lastStats);
+  renderFinStats(lastStats);
+  renderInterpretation(lastStats);
+
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// ──────────────────────────────────────────────
+//  RENDER: DESCRIPTIVE
+// ──────────────────────────────────────────────
+function renderDescStats(s) {
+  var g = document.getElementById('descGrid');
+  var items = [
+    {label:'Count', val:s.n, sub:'observations', accent:'accent-g'},
+    {label:'Mean', val:fmt(s.m,4), sub:'arithmetic average', accent:'accent-t'},
+    {label:'Median', val:fmt(s.med,4), sub:'50th percentile', accent:'accent-l'},
+    {label:'Mode', val:s.mo ? s.mo.map(function(v){return fmt(v,3);}).join(', ') : 'No mode', sub:'most frequent', accent:'accent-g'},
+    {label:'Std Dev (Sample)', val:fmt(s.sd,4), sub:'dispersion (n-1)', accent:'accent-c'},
+    {label:'Variance', val:fmt(s.vari,4), sub:'sample variance', accent:'accent-s'},
+    {label:'Skewness', val:fmt(s.sk,4), sub:s.sk>0.5?'right-skewed':s.sk<-0.5?'left-skewed':'approx. symmetric', accent:'accent-l'},
+    {label:'Excess Kurtosis', val:fmt(s.kurt,4), sub:s.kurt>0?'leptokurtic (fat tails)':s.kurt<0?'platykurtic (thin tails)':'mesokurtic', accent:'accent-g'},
+    {label:'Minimum', val:fmt(s.minV,4), sub:'smallest value', accent:'accent-c'},
+    {label:'Maximum', val:fmt(s.maxV,4), sub:'largest value', accent:'accent-gr'},
+    {label:'Range', val:fmt(s.range,4), sub:'max − min', accent:'accent-t'},
+    {label:'IQR', val:fmt(s.iqr,4), sub:'Q3 − Q1', accent:'accent-g'},
+    {label:'Q1 (25th pct)', val:fmt(s.q1,4), sub:'first quartile', accent:'accent-t'},
+    {label:'Q3 (75th pct)', val:fmt(s.q3,4), sub:'third quartile', accent:'accent-l'},
+    {label:'Coeff. of Variation', val:isNaN(s.cv)?'N/A':fmt(s.cv,2)+'%', sub:'std dev / |mean|', accent:'accent-s'},
+    {label:'Sum', val:fmt(s.data.reduce(function(a,b){return a+b;},0),4), sub:'total', accent:'accent-g'},
+  ];
+  g.innerHTML = items.map(function(it){
+    return '<div class="stat-card"><div class="stat-label">'+it.label+'</div>'
+      +'<div class="stat-val '+it.accent+'">'+it.val+'</div>'
+      +'<div class="stat-sub">'+it.sub+'</div></div>';
+  }).join('');
+}
+
+// ──────────────────────────────────────────────
+//  RENDER: HISTOGRAM
+// ──────────────────────────────────────────────
+function renderHistogram(s) {
+  var canvas = document.getElementById('histChart');
+  var dpr = window.devicePixelRatio || 1;
+  var W = canvas.parentElement.clientWidth - 44;
+  var H = 220;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  var pad = {top:16, right:20, bottom:38, left:46};
+  var cw = W - pad.left - pad.right;
+  var ch = H - pad.top - pad.bottom;
+
+  // Build bins
+  var mn = s.minV, mx = s.maxV;
+  var bw = (mx - mn) / s.binCount;
+  var bins = [];
+  for(var i=0;i<s.binCount;i++) bins.push(0);
+  s.data.forEach(function(v) {
+    var idx = Math.min(s.binCount - 1, Math.floor((v - mn) / bw));
+    bins[idx]++;
+  });
+  var maxCount = Math.max.apply(null, bins);
+
+  // Axes
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  for(var gi=0;gi<=4;gi++){
+    var gy = pad.top + ch - (gi/4)*ch;
+    ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(pad.left+cw, gy); ctx.stroke();
+    ctx.fillStyle = 'rgba(138,151,171,0.7)';
+    ctx.font = '10px DM Mono, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(fmt(maxCount * gi/4, 0), pad.left - 6, gy + 3);
+  }
+
+  // Bars
+  var barW = cw / s.binCount;
+  bins.forEach(function(cnt, i) {
+    var bx = pad.left + i * barW;
+    var bh = (cnt / maxCount) * ch;
+    var by = pad.top + ch - bh;
+    var grad = ctx.createLinearGradient(bx, by, bx, by + bh);
+    grad.addColorStop(0, 'rgba(0,180,166,0.85)');
+    grad.addColorStop(1, 'rgba(0,180,166,0.3)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(bx + 1.5, by, barW - 3, bh);
+  });
+
+  // X labels
+  ctx.fillStyle = 'rgba(138,151,171,0.85)';
+  ctx.font = '10px DM Mono, monospace';
+  ctx.textAlign = 'center';
+  var step = Math.ceil(s.binCount / 6);
+  for(var li=0;li<=s.binCount;li+=step){
+    var lx = pad.left + li * barW;
+    var lv = mn + li * bw;
+    ctx.fillText(fmt(lv,1), lx, pad.top + ch + 16);
+  }
+
+  // Normal overlay
+  var normPts = 120;
+  var normMin = mn - bw, normMax = mx + bw;
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(201,168,76,0.85)';
+  ctx.lineWidth = 2;
+  for(var pi=0;pi<=normPts;pi++){
+    var nx = normMin + (normMax - normMin) * pi / normPts;
+    var ny = normalPDF(nx, s.m, s.sd) * s.n * bw;
+    var px2 = pad.left + (nx - mn) / bw * barW;
+    var py2 = pad.top + ch - (ny / maxCount) * ch;
+    pi===0 ? ctx.moveTo(px2, py2) : ctx.lineTo(px2, py2);
+  }
+  ctx.stroke();
+
+  // Legend
+  ctx.font = '10px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(0,180,166,0.9)'; ctx.fillRect(pad.left, pad.top-2, 12, 10);
+  ctx.fillStyle = 'rgba(138,151,171,0.85)'; ctx.textAlign='left';
+  ctx.fillText('Frequency', pad.left+16, pad.top+8);
+  ctx.strokeStyle = 'rgba(201,168,76,0.85)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(pad.left+110, pad.top+3); ctx.lineTo(pad.left+122, pad.top+3); ctx.stroke();
+  ctx.fillStyle = 'rgba(138,151,171,0.85)';
+  ctx.fillText('Normal Dist.', pad.left+126, pad.top+8);
+}
+
+// ──────────────────────────────────────────────
+//  RENDER: BOX PLOT
+// ──────────────────────────────────────────────
+function renderBoxPlot(s) {
+  var canvas = document.getElementById('boxChart');
+  var dpr = window.devicePixelRatio || 1;
+  var W = canvas.parentElement.clientWidth - 44;
+  var H = 220;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  var pad = {top:28, right:32, bottom:38, left:52};
+  var cw = W - pad.left - pad.right;
+  var ch = H - pad.top - pad.bottom;
+
+  // Whiskers (Tukey 1.5*IQR)
+  var fence_lo = s.q1 - 1.5 * s.iqr;
+  var fence_hi = s.q3 + 1.5 * s.iqr;
+  var wlo = s.sorted.find(function(v){return v >= fence_lo;}) || s.minV;
+  var whi = [...s.sorted].reverse().find(function(v){return v <= fence_hi;}) || s.maxV;
+  var outliers = s.data.filter(function(v){return v < wlo || v > whi;});
+
+  var dataRange = whi - wlo;
+  var padding = dataRange * 0.15 || 1;
+  var vmin = wlo - padding, vmax = whi + padding;
+  function toX(v){ return pad.left + (v - vmin) / (vmax - vmin) * cw; }
+
+  var midY = pad.top + ch / 2;
+  var bh = ch * 0.45;
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+  ctx.lineWidth = 1;
+  var labels = [wlo, s.q1, s.med, s.m, s.q3, whi];
+  labels.forEach(function(v){
+    var lx = toX(v);
+    ctx.beginPath(); ctx.moveTo(lx, pad.top); ctx.lineTo(lx, pad.top+ch+4); ctx.stroke();
+  });
+
+  // Whisker lines
+  ctx.strokeStyle = 'rgba(138,151,171,0.7)';
+  ctx.lineWidth = 1.5;
+  // left whisker
+  ctx.beginPath(); ctx.moveTo(toX(wlo), midY); ctx.lineTo(toX(s.q1), midY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(toX(wlo), midY-bh*0.3); ctx.lineTo(toX(wlo), midY+bh*0.3); ctx.stroke();
+  // right whisker
+  ctx.beginPath(); ctx.moveTo(toX(s.q3), midY); ctx.lineTo(toX(whi), midY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(toX(whi), midY-bh*0.3); ctx.lineTo(toX(whi), midY+bh*0.3); ctx.stroke();
+
+  // IQR box
+  var grad = ctx.createLinearGradient(toX(s.q1), 0, toX(s.q3), 0);
+  grad.addColorStop(0, 'rgba(155,137,212,0.35)');
+  grad.addColorStop(1, 'rgba(0,180,166,0.35)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(toX(s.q1), midY - bh/2, toX(s.q3)-toX(s.q1), bh);
+  ctx.strokeStyle = 'rgba(155,137,212,0.7)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(toX(s.q1), midY - bh/2, toX(s.q3)-toX(s.q1), bh);
+
+  // Median line
+  ctx.strokeStyle = '#C9A84C';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(toX(s.med), midY - bh/2); ctx.lineTo(toX(s.med), midY + bh/2); ctx.stroke();
+
+  // Mean diamond
+  ctx.fillStyle = '#00B4A6';
+  ctx.beginPath();
+  ctx.moveTo(toX(s.m), midY - 7);
+  ctx.lineTo(toX(s.m) + 7, midY);
+  ctx.lineTo(toX(s.m), midY + 7);
+  ctx.lineTo(toX(s.m) - 7, midY);
+  ctx.closePath(); ctx.fill();
+
+  // Outliers
+  ctx.fillStyle = 'rgba(232,99,90,0.8)';
+  outliers.forEach(function(v){
+    ctx.beginPath(); ctx.arc(toX(v), midY, 4, 0, 2*Math.PI); ctx.fill();
+  });
+
+  // X-axis labels
+  ctx.fillStyle = 'rgba(138,151,171,0.85)';
+  ctx.font = '10px DM Mono, monospace';
+  ctx.textAlign = 'center';
+  [[wlo,'Min'],[s.q1,'Q1'],[s.med,'Med'],[s.q3,'Q3'],[whi,'Max']].forEach(function(p){
+    ctx.fillText(fmt(p[0],1), toX(p[0]), pad.top+ch+16);
+    ctx.fillStyle = 'rgba(138,151,171,0.5)';
+    ctx.font = '9px DM Sans, sans-serif';
+    ctx.fillText(p[1], toX(p[0]), pad.top + 10);
+    ctx.fillStyle = 'rgba(138,151,171,0.85)';
+    ctx.font = '10px DM Mono, monospace';
+  });
+
+  // Mean label
+  ctx.fillStyle = 'rgba(0,180,166,0.9)';
+  ctx.font = '9px DM Sans, sans-serif';
+  ctx.fillText('Mean', toX(s.m), pad.top + 10);
+
+  // Legend
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#C9A84C'; ctx.font = '10px DM Sans, sans-serif';
+  ctx.fillText('— Median', pad.left, pad.top - 10);
+  ctx.fillStyle = '#00B4A6';
+  ctx.fillText('◆ Mean', pad.left + 78, pad.top - 10);
+  if(outliers.length > 0){
+    ctx.fillStyle = 'rgba(232,99,90,0.85)';
+    ctx.fillText('● Outliers (' + outliers.length + ')', pad.left + 148, pad.top - 10);
+  }
+}
+
+// ──────────────────────────────────────────────
+//  RENDER: FINANCIAL METRICS
+// ──────────────────────────────────────────────
+function renderFinStats(s) {
+  var confPct = (s.conf * 100).toFixed(0);
+  var freqLabel = {12:'monthly',52:'weekly',252:'daily',4:'quarterly',1:'annual'}[s.freq] || '';
+  var items = [
+    {label:'Annualised Return', val:isNaN(s.annReturn)?'N/A':fmt(s.annReturn,2)+'%',
+      sub:'mean × '+s.freq+' periods', accent:'accent-gr'},
+    {label:'CAGR', val:isNaN(s.cagrVal)?'N/A':fmt(s.cagrVal,2)+'%',
+      sub:'compound annual growth', accent:'accent-g'},
+    {label:'Annualised Volatility', val:isNaN(s.annVol)?'N/A':fmt(s.annVol,2)+'%',
+      sub:'std dev × √'+s.freq, accent:'accent-c'},
+    {label:'Sharpe Ratio', val:isNaN(s.sharpe)?'N/A':fmt(s.sharpe,3),
+      sub:'rfr = '+s.rfr+'%/yr', accent:s.sharpe>=1?'accent-gr':s.sharpe>=0?'accent-g':'accent-c'},
+    {label:'Sortino Ratio', val:isNaN(s.sortino)?'N/A':fmt(s.sortino,3),
+      sub:'downside deviation', accent:s.sortino>=1?'accent-gr':s.sortino>=0?'accent-g':'accent-c'},
+    {label:'Max Drawdown', val:isNaN(s.mdd)?'N/A':fmt(s.mdd,2)+'%',
+      sub:'peak-to-trough loss', accent:'accent-c'},
+    {label:'Calmar Ratio', val:isNaN(s.calmar)?'N/A':fmt(s.calmar,3),
+      sub:'ann. return / max DD', accent:'accent-t'},
+    {label:'Parametric VaR ('+confPct+'%)', val:isNaN(s.varP)?'N/A':fmt(s.varP,3)+'%',
+      sub:'per '+freqLabel+' period', accent:'accent-l'},
+    {label:'CVaR / ES ('+confPct+'%)', val:isNaN(s.cvarP)?'N/A':fmt(s.cvarP,3)+'%',
+      sub:'expected shortfall', accent:'accent-l'},
+    {label:'Win Rate', val:fmt(s.data.filter(function(v){return v>0;}).length/s.n*100,1)+'%',
+      sub:'% positive periods', accent:'accent-gr'},
+    {label:'Best Period', val:fmt(s.maxV,3)+'%', sub:'maximum single period', accent:'accent-gr'},
+    {label:'Worst Period', val:fmt(s.minV,3)+'%', sub:'minimum single period', accent:'accent-c'},
+  ];
+  document.getElementById('finGrid').innerHTML = items.map(function(it){
+    return '<div class="fin-card"><div class="fin-label">'+it.label+'</div>'
+      +'<div class="fin-val '+it.accent+'">'+it.val+'</div>'
+      +'<div class="fin-sub">'+it.sub+'</div></div>';
+  }).join('');
+}
+
+// ──────────────────────────────────────────────
+//  RENDER: INTERPRETATION
+// ──────────────────────────────────────────────
+function renderInterpretation(s) {
+  var parts = [];
+  parts.push('<strong>Dataset:</strong> '+s.n+' observations ranging from '+fmt(s.minV,3)+' to '+fmt(s.maxV,3)+', with a mean of '+fmt(s.m,3)+' and median of '+fmt(s.med,3)+'.');
+  if(Math.abs(s.m - s.med) / (s.sd||1) < 0.1) parts.push('Mean and median are close, suggesting an <strong>approximately symmetric distribution</strong>.');
+  else if(s.m > s.med) parts.push('Mean exceeds median, indicating a <strong>right-skewed (positively skewed) distribution</strong> — common in return series with occasional large gains.');
+  else parts.push('Median exceeds mean, indicating a <strong>left-skewed (negatively skewed) distribution</strong> — possible downside tail risk.');
+  if(Math.abs(s.sk) > 1) parts.push('Skewness of '+fmt(s.sk,3)+' is <strong>substantially non-normal</strong> — normality-based models may understate risk.');
+  if(s.kurt > 1) parts.push('Positive excess kurtosis ('+fmt(s.kurt,3)+') indicates <strong>fat tails</strong> — extreme events occur more often than a normal distribution predicts.');
+  else if(s.kurt < -1) parts.push('Negative excess kurtosis indicates <strong>thin tails</strong> — fewer extreme observations than expected.');
+  if(!isNaN(s.sharpe)){
+    if(s.sharpe >= 2) parts.push('Sharpe ratio of '+fmt(s.sharpe,2)+' is <strong>excellent</strong> (≥2) — very strong risk-adjusted returns.');
+    else if(s.sharpe >= 1) parts.push('Sharpe ratio of '+fmt(s.sharpe,2)+' is <strong>good</strong> (≥1).');
+    else if(s.sharpe >= 0) parts.push('Sharpe ratio of '+fmt(s.sharpe,2)+' is <strong>below 1</strong> — returns do not strongly compensate for volatility.');
+    else parts.push('Sharpe ratio of '+fmt(s.sharpe,2)+' is <strong>negative</strong> — the series underperforms the risk-free rate.');
+  }
+  if(!isNaN(s.mdd) && s.mdd > 0) parts.push('Maximum drawdown of '+fmt(s.mdd,2)+'% represents the largest peak-to-trough decline over the period.');
+  document.getElementById('interpBox').innerHTML = parts.join(' ');
+}
+
+// ──────────────────────────────────────────────
+//  CORRELATION CALCULATOR
+// ──────────────────────────────────────────────
+function calcCorr() {
+  var a = parseData(document.getElementById('corrA').value);
+  var b = parseData(document.getElementById('corrB').value);
+  if(a.length < 3 || b.length < 3) { alert('Enter at least 3 values in each series.'); return; }
+  var minLen = Math.min(a.length, b.length);
+  a = a.slice(0, minLen); b = b.slice(0, minLen);
+  var r = pearsonCorr(a, b);
+  var div = document.getElementById('corrResult');
+  var valEl = document.getElementById('corrVal');
+  var barEl = document.getElementById('corrBar');
+  var interpEl = document.getElementById('corrInterp');
+  div.style.display = 'block';
+  var pct = Math.abs(r);
+  if(isNaN(r)){
+    valEl.textContent = 'N/A'; valEl.style.color = 'var(--muted)';
+    barEl.style.width = '0'; barEl.style.background = 'var(--muted)';
+    interpEl.textContent = 'Could not compute correlation.';
+    return;
+  }
+  valEl.textContent = fmt(r, 4);
+  var color, label;
+  if(r > 0.8)       { color='var(--green)'; label='Very strong positive correlation.'; }
+  else if(r > 0.5)  { color='#88e860'; label='Moderate to strong positive correlation.'; }
+  else if(r > 0.2)  { color='var(--gold)'; label='Weak positive correlation.'; }
+  else if(r > -0.2) { color='var(--muted)'; label='Little to no correlation.'; }
+  else if(r > -0.5) { color='var(--amber)'; label='Weak negative correlation.'; }
+  else if(r > -0.8) { color='var(--coral)'; label='Moderate to strong negative correlation.'; }
+  else               { color='#e85c5c'; label='Very strong negative correlation.'; }
+  valEl.style.color = color;
+  barEl.style.width = (pct * 100) + '%';
+  barEl.style.background = color;
+  interpEl.textContent = label + ' (using '+minLen+' matched observations)';
+}
+
+// ──────────────────────────────────────────────
+//  EXPORT
+// ──────────────────────────────────────────────
+function exportCSV() {
+  if(!lastStats) return;
+  var s = lastStats;
+  var rows = [
+    ['Metric','Value'],
+    ['Count', s.n],
+    ['Mean', fmt(s.m,6)],
+    ['Median', fmt(s.med,6)],
+    ['Std Dev (Sample)', fmt(s.sd,6)],
+    ['Variance', fmt(s.vari,6)],
+    ['Skewness', fmt(s.sk,6)],
+    ['Excess Kurtosis', fmt(s.kurt,6)],
+    ['Min', fmt(s.minV,6)],
+    ['Max', fmt(s.maxV,6)],
+    ['Q1', fmt(s.q1,6)],
+    ['Q3', fmt(s.q3,6)],
+    ['IQR', fmt(s.iqr,6)],
+    ['Annualised Return %', fmt(s.annReturn,4)],
+    ['CAGR %', fmt(s.cagrVal,4)],
+    ['Annualised Volatility %', fmt(s.annVol,4)],
+    ['Sharpe Ratio', fmt(s.sharpe,4)],
+    ['Sortino Ratio', fmt(s.sortino,4)],
+    ['Max Drawdown %', fmt(s.mdd,4)],
+    ['Calmar Ratio', fmt(s.calmar,4)],
+    ['Parametric VaR %', fmt(s.varP,4)],
+    ['CVaR/ES %', fmt(s.cvarP,4)],
+  ];
+  var csv = rows.map(function(r){return r.join(',');}).join('\n');
+  var blob = new Blob([csv], {type:'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'statlens_report.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+function exportJSON() {
+  if(!lastStats) return;
+  var s = lastStats;
+  var obj = {
+    count:s.n, mean:s.m, median:s.med, stdDev:s.sd, variance:s.vari,
+    skewness:s.sk, kurtosis:s.kurt, min:s.minV, max:s.maxV,
+    q1:s.q1, q3:s.q3, iqr:s.iqr,
+    annualisedReturn:s.annReturn, cagr:s.cagrVal, annualisedVol:s.annVol,
+    sharpeRatio:s.sharpe, sortinoRatio:s.sortino, maxDrawdown:s.mdd,
+    calmarRatio:s.calmar, varParametric:s.varP, cvar:s.cvarP,
+    inputData:s.data
+  };
+  var blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'statlens_report.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+function copyReport() {
+  if(!lastStats) return;
+  var s = lastStats;
+  var txt = [
+    'StatLens Financial Statistics Report',
+    '=====================================',
+    'Count: '+s.n+' | Mean: '+fmt(s.m,4)+' | Median: '+fmt(s.med,4),
+    'Std Dev: '+fmt(s.sd,4)+' | Skewness: '+fmt(s.sk,4)+' | Kurtosis: '+fmt(s.kurt,4),
+    'Min: '+fmt(s.minV,4)+' | Max: '+fmt(s.maxV,4)+' | IQR: '+fmt(s.iqr,4),
+    '',
+    'Financial Metrics',
+    '-----------------',
+    'Annualised Return: '+fmt(s.annReturn,2)+'% | CAGR: '+fmt(s.cagrVal,2)+'%',
+    'Annualised Vol: '+fmt(s.annVol,2)+'% | Sharpe: '+fmt(s.sharpe,3),
+    'Sortino: '+fmt(s.sortino,3)+' | Max Drawdown: '+fmt(s.mdd,2)+'%',
+    'Calmar: '+fmt(s.calmar,3)+' | VaR ('+(s.conf*100).toFixed(0)+'%): '+fmt(s.varP,3)+'%',
+    '',
+    'Generated by StatLens — kartikjoshi0999-ops portfolio'
+  ].join('\n');
+  navigator.clipboard.writeText(txt).then(function(){
+    var btn = document.querySelector('.expbtn:last-child');
+    var orig = btn.textContent;
+    btn.textContent = 'Copied!'; btn.style.color = 'var(--green)';
+    setTimeout(function(){btn.textContent = orig; btn.style.color='';}, 2000);
+  });
+}
+
+// Auto redraw on resize
+var resizeTimer;
+window.addEventListener('resize', function(){
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function(){
+    if(lastStats){
+      renderHistogram(lastStats);
+      renderBoxPlot(lastStats);
+    }
+  }, 200);
+});
+</script>
+</body>
+</html>
