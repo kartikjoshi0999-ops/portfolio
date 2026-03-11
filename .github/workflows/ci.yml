@@ -1,0 +1,106 @@
+name: CI — Validate, Check Links & Audit Performance
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  # ─────────────────────────────────────────────
+  # 1. HTML VALIDATION
+  # ─────────────────────────────────────────────
+  html-validate:
+    name: HTML Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install html-validate
+        run: npm install -g html-validate
+
+      - name: Validate HTML files
+        run: |
+          html-validate index.html stats-app.html \
+            --config '{"extends":["html-validate:recommended"],"rules":{"no-inline-style":"off","long-title":"off","no-trailing-whitespace":"off","prefer-native-element":"off"}}'
+
+  # ─────────────────────────────────────────────
+  # 2. BROKEN LINK CHECKER
+  # ─────────────────────────────────────────────
+  link-check:
+    name: Broken Link Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check links with Lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --verbose
+            --no-progress
+            --exclude "fonts.googleapis.com"
+            --exclude "fonts.gstatic.com"
+            --exclude "^mailto:"
+            --exclude "^tel:"
+            --exclude "localhost"
+            --exclude "127.0.0.1"
+            --timeout 30
+            --max-retries 3
+            index.html
+            stats-app.html
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ─────────────────────────────────────────────
+  # 3. LIGHTHOUSE PERFORMANCE AUDIT
+  # ─────────────────────────────────────────────
+  lighthouse:
+    name: Lighthouse Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install serve & Lighthouse CI
+        run: npm install -g @lhci/cli serve
+
+      - name: Serve site locally
+        run: serve -p 8080 . &
+        shell: bash
+
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:8080 --timeout 15000
+
+      - name: Run Lighthouse CI
+        run: |
+          lhci autorun \
+            --collect.url=http://localhost:8080/index.html \
+            --collect.url=http://localhost:8080/stats-app.html \
+            --collect.numberOfRuns=1 \
+            --assert.assertions.categories:performance=["warn",{"minScore":0.7}] \
+            --assert.assertions.categories:accessibility=["error",{"minScore":0.8}] \
+            --assert.assertions.categories:best-practices=["warn",{"minScore":0.8}] \
+            --assert.assertions.categories:seo=["warn",{"minScore":0.8}] \
+            --upload.target=temporary-public-storage
+        continue-on-error: true
+
+      - name: Upload Lighthouse results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          if-no-files-found: ignore
