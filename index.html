@@ -17,32 +17,8 @@ html{scroll-behavior:smooth}
 }
 body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);overflow-x:hidden;line-height:1.6}
 
-/* LOCK */
-#lock{position:fixed;inset:0;z-index:9999;background:var(--navy);display:flex;align-items:center;justify-content:center;
-  background-image:radial-gradient(ellipse 70% 50% at 50% 40%,rgba(0,180,166,.1) 0%,transparent 60%)}
-.lbox{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;
-  padding:48px;max-width:420px;width:90%;text-align:center}
-.lico{font-size:3rem;margin-bottom:16px}
-.ltit{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;margin-bottom:8px}
-.lsub{color:var(--muted);font-size:.88rem;margin-bottom:28px;line-height:1.6}
-.lhint{display:inline-block;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);
-  color:var(--gold);border-radius:6px;padding:6px 14px;font-size:.75rem;
-  font-family:'DM Mono',monospace;letter-spacing:.1em;margin-bottom:24px}
-.linput{width:100%;padding:14px 18px;background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);border-radius:10px;color:var(--text);
-  font-size:1.2rem;font-family:'DM Mono',monospace;letter-spacing:.3em;
-  text-align:center;outline:none;transition:border-color .2s;margin-bottom:14px}
-.linput:focus{border-color:var(--teal)}
-.linput::placeholder{letter-spacing:.05em;color:var(--muted);font-size:.85rem}
-.lbtn{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--amber));
-  border:none;border-radius:10px;color:var(--navy);font-family:'DM Sans',sans-serif;
-  font-weight:700;font-size:.95rem;cursor:pointer;transition:all .2s}
-.lbtn:hover{opacity:.9;transform:translateY(-1px)}
-.lerr{color:var(--coral);font-size:.82rem;margin-top:10px;min-height:20px}
-.lfoot{margin-top:20px;color:var(--muted);font-size:.72rem}
-
 /* MAIN */
-#site{display:none}
+#site{display:block}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 48px;height:64px;
@@ -56,10 +32,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 48px;height:64px;
   font-family:'DM Sans',sans-serif;padding:4px 0}
 .nlinks li button:hover{color:var(--gold)}
 .nlinks li button.act{color:var(--gold)}
-.nlockbtn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  color:var(--muted);border-radius:6px;padding:6px 14px;font-size:.72rem;
-  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
-.nlockbtn:hover{color:var(--coral);border-color:rgba(232,99,90,.4)}
 
 /* HERO */
 .hero{min-height:100vh;display:flex;align-items:center;padding:100px 80px 80px;position:relative;overflow:hidden}
@@ -242,20 +214,6 @@ footer{text-align:center;padding:20px 80px;border-top:1px solid rgba(255,255,255
 </head>
 <body>
 
-<!-- LOCK SCREEN -->
-<div id="lock">
-  <div class="lbox">
-    <div class="lico">🔐</div>
-    <h1 class="ltit">Private Portfolio</h1>
-    <p class="lsub">This portfolio is password protected.<br>Enter the access code to view Kartik Joshi's professional profile.</p>
-    <div class="lhint">ENTER ACCESS CODE</div>
-    <input type="password" id="li" class="linput" placeholder="Enter passcode" maxlength="20" autocomplete="off">
-    <button class="lbtn" id="lbtn">Access Portfolio →</button>
-    <div class="lerr" id="le"></div>
-    <div class="lfoot">🔒 Private &amp; confidential · Share only your personal link</div>
-  </div>
-</div>
-
 <!-- MAIN SITE -->
 <div id="site">
 
@@ -271,7 +229,6 @@ footer{text-align:center;padding:20px 80px;border-top:1px solid rgba(255,255,255
     <li><button id="n6">References</button></li>
     <li><button id="n7">Contact</button></li>
   </ul>
-  <button class="nlockbtn" id="lockbtn">🔒 Lock</button>
 </nav>
 
 <!-- HERO -->
@@ -616,52 +573,12 @@ footer{text-align:center;padding:20px 80px;border-top:1px solid rgba(255,255,255
   <p style="color:var(--muted);font-size:.78rem;margin-top:20px" class="rev">📍 Cornwall, Ontario, Canada · Open to opportunities across Ontario</p>
 </section>
 
-<footer><p>© 2025 Kartik Joshi · Financial Analyst &amp; Banking Professional · Cornwall, Ontario · 🔒 Private Portfolio</p></footer>
+<footer><p>© 2025 Kartik Joshi · Financial Analyst &amp; Banking Professional · Cornwall, Ontario</p></footer>
 
 </div>
 
 <script>
-// ── PASSCODE (change KJ2025 to your own) ──
-var PASS='KJ2025', tries=0;
-
-function doUnlock(){
-  var v=document.getElementById('li').value.trim().toUpperCase();
-  var e=document.getElementById('le');
-  if(v===PASS.toUpperCase()){
-    document.getElementById('lock').style.display='none';
-    document.getElementById('site').style.display='block';
-    sessionStorage.setItem('kju','1');
-    startSite();
-  } else {
-    tries++;
-    document.getElementById('li').value='';
-    document.getElementById('li').style.borderColor='#E8635A';
-    setTimeout(function(){document.getElementById('li').style.borderColor='';},1200);
-    if(tries>=5){
-      e.textContent='Too many attempts. Refresh to try again.';
-      document.getElementById('lbtn').disabled=true;
-      document.getElementById('li').disabled=true;
-    } else {
-      e.textContent='Wrong code. '+(5-tries)+' attempt'+(5-tries===1?'':'s')+' left.';
-    }
-  }
-}
-
-document.getElementById('lbtn').addEventListener('click',doUnlock);
-document.getElementById('li').addEventListener('keydown',function(e){if(e.key==='Enter')doUnlock();});
-document.getElementById('lockbtn').addEventListener('click',function(){
-  sessionStorage.removeItem('kju');
-  document.getElementById('site').style.display='none';
-  document.getElementById('lock').style.display='flex';
-  document.getElementById('li').value='';
-  document.getElementById('le').textContent='';
-  tries=0;
-});
-if(sessionStorage.getItem('kju')){
-  document.getElementById('lock').style.display='none';
-  document.getElementById('site').style.display='block';
-  startSite();
-}
+startSite();
 
 // ── NAV (using unique IDs, NOT scrollTo to avoid browser conflict) ──
 var navIds=['about','skills','experience','projects','education','certifications','references','contact'];
