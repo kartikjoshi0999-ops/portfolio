@@ -161,10 +161,10 @@ canvas{display:block;width:100%;border-radius:6px}
         <div class="err" id="errBox"></div>
         <div class="sample-row">
           <span style="font-size:.68rem;color:var(--muted);align-self:center">Samples:</span>
-          <button class="sample-btn" onclick="loadSample('returns')">Monthly Returns</button>
-          <button class="sample-btn" onclick="loadSample('prices')">Stock Prices</button>
-          <button class="sample-btn" onclick="loadSample('costs')">Project Costs</button>
-          <button class="sample-btn" onclick="loadSample('portfolio')">Portfolio Weights</button>
+          <button type="button" class="sample-btn" onclick="loadSample('returns')">Monthly Returns</button>
+          <button type="button" class="sample-btn" onclick="loadSample('prices')">Stock Prices</button>
+          <button type="button" class="sample-btn" onclick="loadSample('costs')">Project Costs</button>
+          <button type="button" class="sample-btn" onclick="loadSample('portfolio')">Portfolio Weights</button>
         </div>
       </div>
       <div class="input-controls">
@@ -196,8 +196,8 @@ canvas{display:block;width:100%;border-radius:6px}
             <input type="number" id="bins" value="10" step="1" min="3" max="50">
           </div>
         </div>
-        <button class="calcbtn" onclick="calculate()">Calculate →</button>
-        <button class="clearbtn" onclick="clearAll()">Clear Data</button>
+        <button type="button" class="calcbtn" onclick="calculate()">Calculate →</button>
+        <button type="button" class="clearbtn" onclick="clearAll()">Clear Data</button>
       </div>
     </div>
   </div>
@@ -231,9 +231,9 @@ canvas{display:block;width:100%;border-radius:6px}
 
     <!-- EXPORT -->
     <div class="export-row">
-      <button class="expbtn" onclick="exportCSV()">Export CSV</button>
-      <button class="expbtn" onclick="exportJSON()">Export JSON</button>
-      <button class="expbtn" onclick="copyReport()">Copy Report</button>
+      <button type="button" class="expbtn" onclick="exportCSV()">Export CSV</button>
+      <button type="button" class="expbtn" onclick="exportJSON()">Export JSON</button>
+      <button type="button" class="expbtn" onclick="copyReport()">Copy Report</button>
     </div>
   </div>
 
@@ -249,7 +249,7 @@ canvas{display:block;width:100%;border-radius:6px}
         <div class="mini-label">Series B</div>
         <textarea id="corrB" style="height:70px" placeholder="0.9, -0.3, 1.8, 1.1, ..."></textarea>
       </div>
-      <button class="calcbtn" style="margin-bottom:2px" onclick="calcCorr()">Correlate</button>
+      <button type="button" class="calcbtn" style="margin-bottom:2px" onclick="calcCorr()">Correlate</button>
     </div>
     <div class="corr-result" id="corrResult">
       <div class="stat-label" style="margin-top:14px">Pearson Correlation Coefficient (r)</div>
