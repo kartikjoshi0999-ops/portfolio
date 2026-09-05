@@ -30,17 +30,22 @@ setup = [("Forecast start month", "2026-01-01", 'mmm yyyy'),
          ("Sales tax remitted quarterly?", "Yes", None),
          ("Corporate tax rate on profit", 0.12, '0%'),
          ("Monthly revenue growth", 0.03, '0.0%'),
-         ("Month 1 revenue", 48000, '$#,##0')]
+         ("Month 1 revenue", 48000, '$#,##0'),
+         ("Opening accounts receivable (collected in month 1)", 0, '$#,##0'),
+         ("Share of costs that carry HST (for input tax credits)", 0.75, '0%')]
 r = 5
 for lab, val, fmt in setup:
     a.cell(row=r, column=1, value=lab).font = Font(bold=True)
     input_cell(a, f"B{r}", val, fmt); r += 1
 note(a, r, "Collection percentages should add to 100%. Supplier terms should add to 100%.")
+note(a, r + 3, "Opening accounts receivable is what customers already owe you on day one. It lands in month 1 collections.")
+note(a, r + 4, "Input tax credits: HST you pay on purchases is claimed back, so the model remits sales tax NET, not gross.")
 calc_cell(a, f"B{r+1}", '=IF(ROUND(B8+B9+B10,4)=1,"Collections OK","⚠ Collections do not add to 100%")')
 calc_cell(a, f"B{r+2}", '=IF(ROUND(B11+B12,4)=1,"Supplier terms OK","⚠ Supplier terms do not add to 100%")')
 widths(a, {"A": 42, "B": 20})
 a.sheet_view.showGridLines = False
 GROWTH, REV1, COGSPC, HST, TAXR = "Assumptions!$B$17", "Assumptions!$B$18", "Assumptions!$B$13", "Assumptions!$B$14", "Assumptions!$B$16"
+OPENAR, ITCSHARE = "Assumptions!$B$19", "Assumptions!$B$20"
 CIM, C30, BAD = "Assumptions!$B$8", "Assumptions!$B$9", "Assumptions!$B$10"
 SIM, S30 = "Assumptions!$B$11", "Assumptions!$B$12"
 OPEN = "Assumptions!$B$7"
@@ -143,7 +148,7 @@ for i, c in enumerate(COLS):
 r += 2
 section(cf, r, "CASH IN", 14); r += 1
 COLL_R = line("Collections from sales",
-    lambda i, c: (f"=Revenue!{c}{REV_T}*{CIM}" if i == 0
+    lambda i, c: (f"=Revenue!{c}{REV_T}*{CIM}+{OPENAR}" if i == 0
                   else f"=Revenue!{c}{REV_T}*{CIM}+Revenue!{COLS[i-1]}{REV_T}*{C30}"))
 HST_IN = line("Sales tax collected", lambda i, c: f"=Revenue!{c}{REV_T}*{HST}")
 FIN_IN = line("Loan drawdown & owner injections", lambda i, c: f"=Costs!{c}{CAP_R+1}+Costs!{c}{CAP_R+4}")
@@ -154,13 +159,18 @@ COGS_OUT = line("Payments to suppliers (COGS)",
     lambda i, c: (f"=Costs!{c}{COGS_R}*{SIM}" if i == 0
                   else f"=Costs!{c}{COGS_R}*{SIM}+Costs!{COLS[i-1]}{COGS_R}*{S30}"))
 OPEX_OUT = line("Operating expenses", lambda i, c: f"=Costs!{c}{OPEX_T}")
-HST_OUT = line("Sales tax remitted",
-    lambda i, c: (f'=IF({HST}=0,0,IF(Assumptions!$B$15="Yes",IF(MOD({i+1},3)=0,SUM({get_column_letter(2+max(0,i-2))}{HST_IN}:{c}{HST_IN}),0),{c}{HST_IN}))'))
+HST_PAID = line("Sales tax paid on purchases",
+    lambda i, c: f"=(Costs!{c}{COGS_R}+Costs!{c}{OPEX_T}+Costs!{c}{CAP_R})*{ITCSHARE}*{HST}")
+HST_OUT = line("Sales tax remitted (net of input tax credits)",
+    lambda i, c: (f'=IF({HST}=0,0,IF(Assumptions!$B$15="Yes",'
+                  f'IF(MOD({i+1},3)=0,SUM({get_column_letter(2+max(0,i-2))}{HST_IN}:{c}{HST_IN})'
+                  f'-SUM({get_column_letter(2+max(0,i-2))}{HST_PAID}:{c}{HST_PAID}),0),'
+                  f'{c}{HST_IN}-{c}{HST_PAID}))'))
 CAP_OUT = line("Equipment, loan repayments & draws",
     lambda i, c: f"=Costs!{c}{CAP_R}+Costs!{c}{CAP_R+2}+Costs!{c}{CAP_R+3}")
 TAX_OUT = line("Income tax instalment",
     lambda i, c: f"=MAX(0,(Revenue!{c}{REV_T}-Costs!{c}{COGS_R}-Costs!{c}{OPEX_T}))*{TAXR}")
-OUT_T = line("TOTAL CASH OUT", lambda i, c: f"={c}{COGS_OUT}+{c}{OPEX_OUT}+{c}{HST_OUT}+{c}{CAP_OUT}+{c}{TAX_OUT}", bold=True)
+OUT_T = line("TOTAL CASH OUT", lambda i, c: f"={c}{COGS_OUT}+{c}{OPEX_OUT}+{c}{HST_PAID}+{c}{HST_OUT}+{c}{CAP_OUT}+{c}{TAX_OUT}", bold=True)
 r += 1
 NET_R = line("NET CASH MOVEMENT", lambda i, c: f"={c}{IN_T}-{c}{OUT_T}", bold=True)
 CLOSE_R = line("CLOSING CASH", lambda i, c: f"={c}{OPEN_R}+{c}{NET_R}", bold=True)
@@ -208,7 +218,7 @@ d.sheet_view.showGridLines = False
 start_here(wb, "Small Business 12-Month Cash Flow Forecast",
     "Profit is an opinion; cash is a fact. This shows you the fact, month by month.",
     ["Set your start month, opening cash and month-1 revenue on the Assumptions tab.",
-     "Set your collection terms — how much you get paid in month, and how much 30 days later.",
+     "Set your collection terms, and enter anything customers already owe you as opening receivables.",
      "Adjust the revenue streams and their growth on the Revenue tab.",
      "Type your real overheads on the Costs tab. Add capital spend and loan movements at the bottom.",
      "Read Cash Flow and the Dashboard: the lowest cash balance and any ⚠ SHORT months are what to act on."],
@@ -216,6 +226,6 @@ start_here(wb, "Small Business 12-Month Cash Flow Forecast",
      "Assumptions — one screen that drives the whole model, with built-in sanity checks.",
      "Revenue — four streams with growth and unit economics.",
      "Costs — COGS driven off revenue, 14 overhead lines, capital and financing.",
-     "Cash Flow — timing-aware collections, supplier terms, HST remittance and tax instalments.",
+     "Cash Flow — timing-aware collections, supplier terms, HST remitted net of input tax credits, tax instalments.",
      "Dashboard — margins, break-even revenue, lowest cash point and two charts."])
 finish(wb, os.path.join(OUT, "05-Small-Business-12-Month-Cash-Flow-Forecast.xlsx"))

@@ -103,7 +103,7 @@ TAX = row_line(i, 14, "Income tax", f"=-MAX(0,B13)*{dr('Effective tax rate','$B'
                lambda k, c, p: f"=-MAX(0,{c}13)*{dr('Effective tax rate', c)}", indent=1)
 NI = row_line(i, 15, "NET INCOME", "=B13+B14", lambda k, c, p: f"={c}13+{c}14", bold=True)
 DIV = row_line(i, 17, "Dividends declared", "=0",
-               lambda k, c, p: f"=-{c}15*{dr('Dividend payout % of net income', c)}")
+               lambda k, c, p: f"=-MAX(0,{c}15)*{dr('Dividend payout % of net income', c)}")
 row_line(i, 19, "Gross margin %", "=IFERROR(B7/B5,0)", lambda k, c, p: f"=IFERROR({c}7/{c}5,0)", '0.0%')
 row_line(i, 20, "EBITDA margin %", "=IFERROR(B9/B5,0)", lambda k, c, p: f"=IFERROR({c}9/{c}5,0)", '0.0%')
 row_line(i, 21, "Net margin %", "=IFERROR(B15/B5,0)", lambda k, c, p: f"=IFERROR({c}15/{c}5,0)", '0.0%')

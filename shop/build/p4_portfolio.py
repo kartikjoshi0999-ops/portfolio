@@ -13,9 +13,9 @@ wb = Workbook(); wb.remove(wb.active)
 # ---------- Holdings ----------
 h = wb.create_sheet("Holdings")
 title_block(h, "Holdings", "One row per position. Update the price column and everything else follows.", 12)
-header_row(h, 4, ["Ticker", "Name", "Account", "Asset class", "Currency", "Units",
-                  "Avg cost / unit", "Book value", "Current price", "Market value",
-                  "Gain / loss $", "Gain / loss %", "% of portfolio"])
+header_row(h, 4, ["Ticker", "Name", "Account", "Asset class", "Currency", "FX to CAD",
+                  "Units", "Avg cost / unit", "Book value (CAD)", "Current price",
+                  "Market value (CAD)", "Gain / loss $", "Gain / loss %", "% of portfolio"])
 sample = [
     ("VFV.TO", "Vanguard S&P 500 Index ETF", "TFSA", "Equity — US", "CAD", 120, 118.40, 141.20),
     ("XIC.TO", "iShares Core S&P/TSX Capped ETF", "TFSA", "Equity — Canada", "CAD", 200, 34.10, 39.85),
@@ -32,22 +32,26 @@ for r in range(H1, H2 + 1):
     s = sample[k] if k < len(sample) else ("",) * 8
     for col, val in zip("ABCDE", s[:5]):
         input_cell(h, f"{col}{r}", val or None)
-    input_cell(h, f"F{r}", s[5] or None, '#,##0.0000')
-    input_cell(h, f"G{r}", s[6] or None, '#,##0.0000')
-    calc_cell(h, f"H{r}", f'=IF($A{r}="","",N(F{r})*N(G{r}))', '$#,##0.00')
-    input_cell(h, f"I{r}", s[7] or None, '#,##0.0000')
-    calc_cell(h, f"J{r}", f'=IF($A{r}="","",N(F{r})*N(I{r}))', '$#,##0.00')
-    calc_cell(h, f"K{r}", f'=IF($A{r}="","",N(J{r})-N(H{r}))', '$#,##0.00')
-    calc_cell(h, f"L{r}", f'=IF(OR($A{r}="",N(H{r})=0),"",N(K{r})/N(H{r}))', '0.0%')
-    calc_cell(h, f"M{r}", f'=IF(OR($A{r}="",$J${H2+1}=0),"",N(J{r})/$J${H2+1})', '0.0%')
+    input_cell(h, f"F{r}", (1 if s[0] else None), '#,##0.0000')
+    input_cell(h, f"G{r}", s[5] or None, '#,##0.0000')
+    input_cell(h, f"H{r}", s[6] or None, '#,##0.0000')
+    calc_cell(h, f"I{r}", f'=IF($A{r}="","",N(G{r})*N(H{r})*N(F{r}))', '$#,##0.00')
+    input_cell(h, f"J{r}", s[7] or None, '#,##0.0000')
+    calc_cell(h, f"K{r}", f'=IF($A{r}="","",N(G{r})*N(J{r})*N(F{r}))', '$#,##0.00')
+    calc_cell(h, f"L{r}", f'=IF($A{r}="","",N(K{r})-N(I{r}))', '$#,##0.00')
+    calc_cell(h, f"M{r}", f'=IF(OR($A{r}="",N(I{r})=0),"",N(L{r})/N(I{r}))', '0.0%')
+    calc_cell(h, f"N{r}", f'=IF(OR($A{r}="",$K${H2+1}=0),"",N(K{r})/$K${H2+1})', '0.0%')
     acc.add(h[f"C{r}"]); cls.add(h[f"D{r}"])
 T = H2 + 1
 h.cell(row=T, column=1, value="TOTAL").font = Font(bold=True)
-for col in "HJK":
+for col in "IKL":
     calc_cell(h, f"{col}{T}", f"=SUM({col}{H1}:{col}{H2})", '$#,##0.00', bold=True)
-calc_cell(h, f"L{T}", f'=IF(H{T}=0,"",K{T}/H{T})', '0.0%', bold=True)
-widths(h, {"A": 11, "B": 36, "C": 15, "D": 20, "E": 10, "F": 11, "G": 14,
-           "H": 14, "I": 13, "J": 14, "K": 14, "L": 12, "M": 13})
+calc_cell(h, f"M{T}", f'=IF(I{T}=0,"",L{T}/I{T})', '0.0%', bold=True)
+widths(h, {"A": 11, "B": 34, "C": 15, "D": 20, "E": 10, "F": 11, "G": 11,
+           "H": 14, "I": 16, "J": 13, "K": 17, "L": 14, "M": 12, "N": 13})
+note(h, T + 2, "FX to CAD: leave it at 1 for anything priced in Canadian dollars. For a USD holding, put "
+                "today's USD/CAD rate here and enter the price and average cost in USD.")
+note(h, T + 3, "Book value, market value and every dashboard figure are in Canadian dollars.")
 h.freeze_panes = "A5"; h.sheet_view.showGridLines = False
 
 # ---------- Contributions ----------
@@ -82,9 +86,9 @@ d = wb.create_sheet("Dashboard")
 title_block(d, "Dashboard", "Where you stand, what it cost, and how it is split.", 6)
 section(d, 4, "PORTFOLIO AT A GLANCE", 6)
 rows = [
-    ("Market value", f"=Holdings!J{T}", '$#,##0.00'),
-    ("Book value (what you paid)", f"=Holdings!H{T}", '$#,##0.00'),
-    ("Unrealised gain / loss", f"=Holdings!K{T}", '$#,##0.00'),
+    ("Market value (CAD)", f"=Holdings!K{T}", '$#,##0.00'),
+    ("Book value (what you paid)", f"=Holdings!I{T}", '$#,##0.00'),
+    ("Unrealised gain / loss", f"=Holdings!L{T}", '$#,##0.00'),
     ("Return on book", f'=IF(B7=0,"—",B8/B7)', '0.0%'),
     ("Dividends received (net)", "='Dividend Log'!F206", '$#,##0.00'),
     ("Net contributions", '=SUMIF(Contributions!$C$5:$C$304,"Contribution",Contributions!$D$5:$D$304)'
@@ -105,7 +109,7 @@ classes = ["Equity — Canada", "Equity — US", "Equity — Global", "Fixed inc
 targets = [0.20, 0.30, 0.20, 0.20, 0.05, 0.03, 0.02, 0.00]
 for cname, tg in zip(classes, targets):
     d.cell(row=r, column=1, value=cname).border = BOX
-    calc_cell(d, f"B{r}", f'=SUMIF(Holdings!$D${H1}:$D${H2},$A{r},Holdings!$J${H1}:$J${H2})', '$#,##0.00')
+    calc_cell(d, f"B{r}", f'=SUMIF(Holdings!$D${H1}:$D${H2},$A{r},Holdings!$K${H1}:$K${H2})', '$#,##0.00')
     calc_cell(d, f"C{r}", f'=IF($B$6=0,0,B{r}/$B$6)', '0.0%')
     input_cell(d, f"D{r}", tg, '0.0%')
     calc_cell(d, f"E{r}", f"=C{r}-D{r}", '0.0%')
@@ -120,7 +124,7 @@ ACC_R = r
 header_row(d, r, ["Account", "Market value", "% of total"]); r += 1
 for a in ["TFSA", "RRSP", "FHSA", "RESP", "Non-registered", "LIRA", "Other"]:
     d.cell(row=r, column=1, value=a).border = BOX
-    calc_cell(d, f"B{r}", f'=SUMIF(Holdings!$C${H1}:$C${H2},$A{r},Holdings!$J${H1}:$J${H2})', '$#,##0.00')
+    calc_cell(d, f"B{r}", f'=SUMIF(Holdings!$C${H1}:$C${H2},$A{r},Holdings!$K${H1}:$K${H2})', '$#,##0.00')
     calc_cell(d, f"C{r}", f'=IF($B$6=0,0,B{r}/$B$6)', '0.0%')
     r += 1
 pie = PieChart(); pie.title = "Asset allocation"; pie.height = 9; pie.width = 12
@@ -136,13 +140,13 @@ d.sheet_view.showGridLines = False
 
 start_here(wb, "Investment Portfolio Tracker (Canada)",
     "TFSA, RRSP, FHSA and non-registered in one place, with drift against your targets.",
-    ["Enter your positions on the Holdings tab — units, average cost and today's price.",
+    ["Enter your positions on the Holdings tab — units, average cost, price, and the FX rate to CAD (1 for Canadian holdings).",
      "Pick the account and asset class from the drop-downs; the Dashboard groups on them.",
      "Log deposits and withdrawals on Contributions so you can see real money in versus growth.",
      "Record dividends on the Dividend Log — including withholding tax on US names.",
      "Set your target weights on the Dashboard. The drift column tells you what to rebalance."],
     ["Start Here — this page.",
-     "Holdings — 60 positions with book value, market value and gain/loss.",
+     "Holdings — 60 positions in any currency, converted to CAD, with book value, market value and gain.",
      "Contributions — 300-row deposit and withdrawal register.",
      "Dividend Log — 200-row income tracker with withholding tax.",
      "Dashboard — totals, allocation vs target with drift, split by account, two charts."])

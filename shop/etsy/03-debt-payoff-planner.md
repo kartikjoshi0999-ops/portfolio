@@ -19,8 +19,8 @@ The difference between paying the minimums and following a plan is usually sever
 WHAT YOU GET
 ✓ Handles up to 8 debts and orders them for you — no sorting, no re-typing
 ✓ Switch between Snowball and Avalanche from a drop-down and watch the answer change
-✓ True rollover: the moment a debt is cleared, its payment moves to the next one automatically
-✓ A 180-month schedule showing interest, payment and balance for every debt, every month
+✓ Every debt keeps its minimum payment every month — only the spare cash goes to the target, exactly as a real snowball works
+✓ A 180-month schedule showing interest, minimum due, payment and balance for every debt, every month — and the moment a debt clears, its freed-up minimum rolls onto the next one
 ✓ Your debt-free date, your total interest, and your total repayment on one summary tab
 ✓ Change the extra payment by $50 and see months come off the plan instantly
 

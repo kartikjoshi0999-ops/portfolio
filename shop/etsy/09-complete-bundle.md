@@ -17,7 +17,7 @@ See PRICING-AND-FEES.md for the full working.
 Everything in the shop, in one download, for less than half of what the eight products cost separately.
 
 WHAT YOU GET
-✓ All eight products in one download — six Excel templates and two PDF guides
+✓ All eight products in one ZIP download — six Excel templates and two PDF guides, plus a read-me
 ✓ $104.92 of products for $49.99, a saving of $54.93
 ✓ Covers the whole picture: budgeting, debt, registered accounts, investing, business cash flow and financial modelling
 ✓ Every spreadsheet has its formulas already written and a Start Here tab explaining exactly what to do
@@ -60,14 +60,7 @@ finance bundle, budget spreadsheet, excel templates, personal finance, canada fi
 
 ## 5. Digital files to upload
 
-   - shop/dist/01-Canadian-Budget-and-Cash-Flow-Tracker.xlsx
-   - shop/dist/02-TFSA-vs-RRSP-Contribution-Planner.xlsx
-   - shop/dist/03-Debt-Payoff-Planner-Snowball-and-Avalanche.xlsx
-   - shop/dist/04-Investment-Portfolio-Tracker.xlsx
-   - shop/dist/05-Small-Business-12-Month-Cash-Flow-Forecast.xlsx
-   - shop/dist/06-3-Statement-Financial-Model-Template.xlsx
-   - shop/dist/07-Newcomer-to-Canada-Money-Starter-Kit.pdf
-   - shop/dist/08-Finance-and-Banking-Interview-Prep-Pack.pdf
+   - shop/dist/09-Complete-Finance-Bundle.zip
 
 ## 6. Photos to upload, in this order
 

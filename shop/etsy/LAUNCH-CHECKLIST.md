@@ -6,8 +6,14 @@ Nine listings, one shop, one afternoon. Tick as you go.
 
 - [ ] Download the whole `shop/dist/` folder to the computer you will list from
 - [ ] Open each of the six spreadsheets once yourself, just to see what a buyer sees
+- [ ] Open `09-Complete-Finance-Bundle.zip` and check all eight products plus the read-me are inside
 - [ ] Open both PDFs and check they render on your machine
 - [ ] Decide your shop name from the list in `00-SHOP-SETUP.md` and check it is available
+
+> **Etsy allows at most five files per listing.** That is why the bundle ships as a single ZIP —
+> `09-Complete-Finance-Bundle.zip` — holding all eight products and a read-me. Upload that one file
+> for listing 09. Every other listing has exactly one file. If you ever change a product, rebuild the
+> ZIP with `python3 shop/build/make_bundle.py` before re-uploading.
 
 > **On the spreadsheets.** Every workbook is set to recalculate on open, so a buyer sees a fully
 > populated template the moment they open it — in Excel, Google Sheets, Numbers or LibreOffice.

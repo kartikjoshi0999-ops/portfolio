@@ -17,9 +17,9 @@ See PRICING-AND-FEES.md for the full working.
 Most budget templates are built for American money. This one is not. It is built by a Canadian personal banker, with the categories Canadians actually spend on and the accounts Canadians actually save into.
 
 WHAT YOU GET
-✓ 38 ready-made Canadian budget categories — rent, hydro, auto insurance, TFSA and RRSP contributions, childcare — that you can rename to match your life
+✓ 38 ready-made Canadian budget categories — rent, hydro, auto insurance, TFSA and RRSP contributions, childcare — plus 12 spare slots already wired into every formula
 ✓ A 1,200-row transaction log with a drop-down category picker, so a whole year of spending fits in one file
-✓ Budget vs actual for all 12 months, with the variance calculated for every single category
+✓ Budget vs actual for all 12 months with the variance on every category, filtered to the budget year you choose — so several years can live in one file
 ✓ A dashboard that shows your real savings rate — the number most budget templates never give you
 ✓ A month-by-month chart of money in against money out
 

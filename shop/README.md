@@ -11,9 +11,11 @@ shop/
 │   ├── catalog*.py     product data: prices, titles, tags, descriptions, image content
 │   ├── p1..p8_*.py     one script per product
 │   ├── mockups.py      listing images, shop banner and icon
+│   ├── make_bundle.py  packages the 8 products into the bundle ZIP
 │   └── gen_listings.py builds the Etsy listing kit from the catalog
 ├── dist/           what you actually upload to Etsy
 │   ├── *.xlsx / *.pdf      the 8 products
+│   ├── 09-...-Bundle.zip   all 8 in one file — Etsy allows max 5 files per listing
 │   └── images/             4 listing images per listing, plus shop banner and icon
 └── etsy/           the listing kit
     ├── 00-SHOP-SETUP.md      shop identity, about, policies, FAQs, message to buyers
@@ -33,8 +35,8 @@ shop/
 | 05 | Small Business 12-Month Cash Flow Forecast | $16.99 | xlsx |
 | 06 | 3-Statement Financial Model Template | $27.99 | xlsx |
 | 07 | Newcomer to Canada — Money Starter Kit | $7.99 | pdf, 13 pages |
-| 08 | Finance & Banking Interview Prep Pack | $11.99 | pdf, 12 pages |
-| 09 | The Complete Finance Bundle — all 8 | $49.99 | 8 files |
+| 08 | Finance & Banking Interview Prep Pack | $11.99 | pdf, 16 pages |
+| 09 | The Complete Finance Bundle — all 8 | $49.99 | one zip |
 
 Buying all eight separately costs $104.92, so the bundle saves $54.93 (52%).
 
@@ -45,6 +47,7 @@ cd shop/build
 pip install openpyxl reportlab pillow
 python3 p1_budget.py && python3 p2_tfsa_rrsp.py && python3 p3_debt.py && python3 p4_portfolio.py
 python3 p5_cashflow.py && python3 p6_model.py && python3 p7_newcomer.py && python3 p8_interview.py
+python3 make_bundle.py
 python3 -c "import catalog, mockups; [mockups.build(p) for p in catalog.ALL]; mockups.build_brand()"
 python3 gen_listings.py
 ```
@@ -56,6 +59,6 @@ and the listing kit and the images both update.
 
 Every workbook is written with `fullCalcOnLoad` set, so Excel, Google Sheets, Numbers and LibreOffice
 all recalculate the moment the file opens — a buyer never sees an empty template. The formulas in
-products 02, 03, 04, 05 and 06 were verified numerically by recalculating the built files and checking
-the results (the 3-statement model balances in every forecast year and its cash flow ties back to the
-balance sheet).
+every product was verified numerically by recalculating the built file and checking the results — the
+3-statement model balances in every forecast year and its cash flow ties back to the balance sheet, and
+the debt planner pays every debt its minimum before any spare cash reaches the target debt.

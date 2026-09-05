@@ -16,10 +16,10 @@ doc = Doc(os.path.join(OUT, "08-Finance-and-Banking-Interview-Prep-Pack.pdf"),
           "Finance & Banking Interview Prep Pack", "prep")
 e = cover_page(
     "Finance &amp; Banking<br/>Interview Prep Pack",
-    "120 real questions, model answers, and the framework behind them",
+    "120 questions, 22 worked model answers, and the framework behind them",
     "Written by a Financial Analyst and Personal Banker who has sat on both sides of the table —<br/>"
     "at BMO in Canada and Deutsche Bank in India.",
-    ["Behavioural · Technical finance · AML, KYC and FINTRAC · Credit · Payments and operations",
+    ["40 behavioural · 22 core finance · 20 AML, KYC and FINTRAC · 18 credit · 20 payments and operations",
      "STAR answer builder · Questions to ask · 30-60-90 plan · Follow-up templates"])
 
 e += [H1("How to use this pack"),
@@ -32,7 +32,7 @@ e += [H1("How to use this pack"),
                 "Skim the technical section for your role and mark anything you cannot explain out loud in 60 seconds.",
                 "Rehearse those out loud. Not in your head — out loud, timed.",
                 "The night before, read only your six stories and your questions to ask.",
-                "After the interview, send the follow-up on page 20 within 24 hours."]),
+                "After the interview, send the follow-up from section 9 within 24 hours."]),
       box("The rule that matters most", [
           "In finance interviews, the wrong answer delivered with a clear structure beats the right answer "
           "delivered as a ramble. Structure signals how you will handle a client, a regulator, or an auditor. "
@@ -113,8 +113,10 @@ e += [H1("How to use this pack"),
       PageBreak(),
 
       H1("3 · Technical — core finance"),
-      P("Model answers are deliberately short. Say this much, then stop and let them ask a follow-up. "
-        "Over-explaining is the most common way candidates talk themselves into trouble."),
+      P("Twenty-two questions across the four technical sections carry a full worked answer. Each is "
+        "deliberately short: say this much, then stop and let them ask a follow-up. Over-explaining is the "
+        "most common way candidates talk themselves into trouble. Every section then lists the rest of the "
+        "questions that come up, for you to rehearse in your own words."),
       H3("Walk me through the three financial statements and how they link."),
       Q("The income statement shows profitability over a period. The balance sheet is a snapshot of assets, "
         "liabilities and equity at a point in time. The cash flow statement reconciles profit to actual cash. "
@@ -151,6 +153,8 @@ e += [H1("How to use this pack"),
         "a cash figure. A capital-intensive business with strong EBITDA can be free-cash-flow negative for years."),
       PageBreak(),
 
+      H2("More questions to be ready for"),
+      bullets(['What is the difference between accrual and cash accounting?', 'Why can a company be profitable and still run out of cash?', 'What is deferred revenue, and where does it sit on the balance sheet?', 'How does a share buyback affect all three statements?', 'What is goodwill, and when is it impaired?', 'Explain operating leverage, and who it hurts in a downturn.', 'What is the difference between enterprise value and equity value?', 'Why do we discount unlevered free cash flow rather than net income?', 'What is a terminal value, and how would you sanity-check one?', 'What is the difference between FIFO and weighted-average inventory costing?', 'How would you build a revenue forecast for a business with no history?', 'What is a sensitivity analysis, and which two variables would you flex first?', 'What does a negative working capital balance tell you about a business?', 'How would you assess whether a company can afford its dividend?', 'How is amortisation of an intangible different from depreciation?']),
       H1("4 · Technical — AML, KYC and FINTRAC"),
       P("For any Canadian banking role, expect at least three compliance questions. Getting these right marks "
         "you as someone who can be put in front of clients without supervision."),
@@ -187,6 +191,8 @@ e += [H1("How to use this pack"),
         "enhanced due diligence asks the second."),
       PageBreak(),
 
+      H2("More questions to be ready for"),
+      bullets(['What is the difference between customer due diligence and enhanced due diligence?', 'What is a beneficial owner, and what ownership threshold triggers identification?', 'Give me three red flags in a personal chequing account that you would escalate.', 'What is smurfing, and how would it show up in a branch?', 'What is a nominee account, and why is it higher risk?', 'How long must client identification and transaction records be kept?', 'What is a third-party determination, and when do you have to make one?', 'What is the difference between a suspicious transaction and a suspicious attempted transaction?', 'What happens when a client name matches a sanctions list?', 'What is trade-based money laundering, in one sentence?', 'Why are cash-intensive businesses treated as higher risk?', 'What would make you re-assess the risk rating of an existing client?', 'What is tipping off, and why is it an offence rather than a policy breach?', 'How do you verify identity for a client who never comes into a branch?']),
       H1("5 · Technical — credit and retail banking"),
       H3("Walk me through the five Cs of credit."),
       Q("Character — the client's repayment history and credit behaviour. Capacity — can the cash flow service "
@@ -216,6 +222,8 @@ e += [H1("How to use this pack"),
         "Recommending otherwise would fail suitability."),
       PageBreak(),
 
+      H2("More questions to be ready for"),
+      bullets(['What is the difference between a hard and a soft credit enquiry?', 'A client has a credit score of 680. What does that tell you, and what does it not?', 'What is loan-to-value, and why does it drive pricing?', 'Explain the difference between the amortisation and the term on a Canadian mortgage.', 'What is the mortgage stress test rate, and what problem does it exist to solve?', 'What is the difference between a HELOC and a second mortgage?', 'How do you assess income for a self-employed applicant?', 'What is a covenant, and what happens when one is breached?', 'In a default, what actually changes between secured and unsecured lending?', 'A client wants to roll consumer debt into their mortgage. What do you walk them through?', 'What is Know Your Product, and how is it different from Know Your Client?', 'What makes an investment recommendation unsuitable, even when the client asks for it?', 'How does a GIC ladder work, and which client does it suit?']),
       H1("6 · Technical — payments, operations and controls"),
       H3("What is a reconciliation, and what do you do when it does not balance?"),
       Q("Comparing two independent records of the same activity and explaining every difference. When it does "
@@ -240,6 +248,8 @@ e += [H1("How to use this pack"),
         "not a housekeeping task."),
       PageBreak(),
 
+      H2("More questions to be ready for"),
+      bullets(['What is an MT103, and what does it carry?', 'What is an IBAN, and where is it required?', 'What is a value date, and why does it matter to the client?', 'What is the difference between a nostro and a vostro account?', 'What is straight-through processing, and what breaks it?', 'What causes a payment repair, and how would you reduce the repair rate?', 'What is the difference between a recall and a return?', 'What is a chargeback, and who carries the loss?', 'What is the difference between an EFT and a wire?', 'What happens to a payment that arrives after the cut-off time?', 'What is a suspense account, and why must it be cleared?', 'What is an aged item, and at what point do you escalate one?', 'What is dual control, and where would you insist on it?', 'What is a break in a nostro reconciliation?', 'A batch failed to release. What do you check first, second, third?', 'What is business continuity, and what would your role be in an outage?']),
       H1("7 · Questions to ask them"),
       P("Ask three or four. Never ask a question whose answer is on the first page of their website, and never "
         "lead with salary or holidays."),

@@ -17,8 +17,8 @@ See PRICING-AND-FEES.md for the full working.
 A brokerage app tells you what your account is worth today. It will not tell you that you are 14% underweight in fixed income, or how much of your gain is just money you deposited. This spreadsheet does both.
 
 WHAT YOU GET
-✓ Room for 60 positions across TFSA, RRSP, FHSA, RESP, LIRA and non-registered accounts
-✓ Book value, market value, dollar gain and percentage gain calculated for every holding
+✓ Room for 60 positions across TFSA, RRSP, FHSA, RESP, LIRA and non-registered accounts, in any currency
+✓ An FX column converts USD or any other currency to Canadian dollars, so totals, allocation and drift are all in one currency
 ✓ Set your own target weights and see the drift — the number that tells you what to rebalance
 ✓ A 300-row contribution register so you can separate real growth from money you added
 ✓ A 200-row dividend log with a column for US withholding tax

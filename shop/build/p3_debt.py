@@ -55,6 +55,7 @@ d[f"B{r}"].number_format = 'yyyy-mm'
 r += 2
 note(d, r, "Type the method exactly as Snowball or Avalanche — the drop-down keeps it clean.")
 note(d, r + 1, "Extra payment is anything you can add on top of the minimums. Try changing it and watch the payoff date move.")
+calc_cell(d, f"A{r+3}", f'=IF(B18>=D{LAST+1},"Budget covers every minimum payment.","\u26a0 Your budget is below the total minimums \u2014 raise it, or some accounts will go unpaid.")')
 widths(d, {"A": 26, "B": 16, "C": 18, "D": 18, "E": 12, "F": 13, "G": 10})
 d.sheet_view.showGridLines = False
 
@@ -62,48 +63,56 @@ BUDGET, START = "'Your Debts'!$B$18", "'Your Debts'!$B$19"
 
 # ---------- Plan / schedule ----------
 s = wb.create_sheet("Payoff Plan")
-title_block(s, "Payoff Plan", "Month-by-month. Freed-up minimums roll onto the next debt automatically.", 12)
-s.cell(row=4, column=1, value="Payoff order →").font = Font(bold=True)
+title_block(s, "Payoff Plan", "Every debt gets its minimum first. Everything spare goes to the target debt, and rolls on as each one clears.", 12)
+s.cell(row=4, column=1, value="Payoff order \u2192").font = Font(bold=True)
 for k in range(N):
-    col = 4 + k * 3
-    L = get_column_letter(col)
-    s.cell(row=4, column=col, value=f'=IF(\'Your Debts\'!$G${FIRST+k}=0,"—",INDEX(\'Your Debts\'!$A${FIRST}:$A${LAST},\'Your Debts\'!$G${FIRST+k}))')
+    col = 6 + k * 4
+    s.cell(row=4, column=col, value=f'=IF(\'Your Debts\'!$G${FIRST+k}=0,"\u2014",INDEX(\'Your Debts\'!$A${FIRST}:$A${LAST},\'Your Debts\'!$G${FIRST+k}))')
     s.cell(row=4, column=col).font = Font(bold=True, color=MID)
-    s.merge_cells(start_row=4, start_column=col, end_row=4, end_column=col + 2)
-hdr = ["Month", "Date", "Budget"]
+    s.merge_cells(start_row=4, start_column=col, end_row=4, end_column=col + 3)
+hdr = ["Month", "Date", "Budget", "Minimums due", "Spare for target"]
 for k in range(N):
-    hdr += ["Interest", "Payment", "Balance"]
+    hdr += ["Interest", "Minimum due", "Payment", "Balance"]
 hdr += ["Total balance", "Interest paid to date"]
 header_row(s, 5, hdr)
-TOTCOL = 4 + N * 3
+TOTCOL = 6 + N * 4
 TL, IL = get_column_letter(TOTCOL), get_column_letter(TOTCOL + 1)
+MIN_COLS = [get_column_letter(7 + k * 4) for k in range(N)]
+PAY_COLS = [get_column_letter(8 + k * 4) for k in range(N)]
 for m in range(M):
     r = 6 + m
     s.cell(row=r, column=1, value=m + 1).border = BOX
     calc_cell(s, f"B{r}", f"=EDATE({START},{m})", 'mmm yyyy')
     calc_cell(s, f"C{r}", f"={BUDGET}", '$#,##0.00')
+    calc_cell(s, f"D{r}", "=" + "+".join(f"{c}{r}" for c in MIN_COLS), '$#,##0.00')
+    calc_cell(s, f"E{r}", f"=MAX(0,C{r}-D{r})", '$#,##0.00')
     for k in range(N):
-        col = 4 + k * 3
-        ci, cp, cb = (get_column_letter(col), get_column_letter(col + 1), get_column_letter(col + 2))
+        col = 6 + k * 4
+        ci, cm, cp, cb = (get_column_letter(col), get_column_letter(col + 1),
+                          get_column_letter(col + 2), get_column_letter(col + 3))
         idx = f"'Your Debts'!$G${FIRST+k}"
         if m == 0:
             prev = f'IF({idx}=0,0,INDEX(\'Your Debts\'!$B${FIRST}:$B${LAST},{idx}))'
         else:
             prev = f"{cb}{r-1}"
         rate = f'IF({idx}=0,0,INDEX(\'Your Debts\'!$C${FIRST}:$C${LAST},{idx})/12)'
+        minp = f'IF({idx}=0,0,INDEX(\'Your Debts\'!$D${FIRST}:$D${LAST},{idx}))'
         calc_cell(s, f"{ci}{r}", f"=ROUND(({prev})*({rate}),2)", '#,##0.00')
-        used = "0" if k == 0 else "+".join(f"{get_column_letter(5 + 3*j)}{r}" for j in range(k))
-        calc_cell(s, f"{cp}{r}", f"=MIN(({prev})+{ci}{r},MAX(0,$C{r}-({used})))", '#,##0.00')
+        calc_cell(s, f"{cm}{r}", f"=MIN(({prev})+{ci}{r},{minp})", '#,##0.00')
+        spent = "0" if k == 0 else "+".join(f"({PAY_COLS[j]}{r}-{MIN_COLS[j]}{r})" for j in range(k))
+        calc_cell(s, f"{cp}{r}",
+                  f"={cm}{r}+MIN(({prev})+{ci}{r}-{cm}{r},MAX(0,$E{r}-({spent})))", '#,##0.00')
         calc_cell(s, f"{cb}{r}", f"=ROUND(MAX(0,({prev})+{ci}{r}-{cp}{r}),2)", '#,##0.00')
-    bal_cells = "+".join(f"{get_column_letter(6 + k*3)}{r}" for k in range(N))
-    calc_cell(s, f"{TL}{r}", f"={bal_cells}", '$#,##0.00', bold=True)
-    int_cells = "+".join(f"{get_column_letter(4 + k*3)}{r}" for k in range(N))
+    calc_cell(s, f"{TL}{r}", "=" + "+".join(f"{get_column_letter(9 + k*4)}{r}" for k in range(N)),
+              '$#,##0.00', bold=True)
     prev_i = "0" if m == 0 else f"{IL}{r-1}"
-    calc_cell(s, f"{IL}{r}", f"={prev_i}+{int_cells}", '$#,##0.00')
-widths(s, dict({"A": 8, "B": 12, "C": 12, TL: 16, IL: 20},
-               **{get_column_letter(4 + i): 11 for i in range(N * 3)}))
-s.freeze_panes = "D6"
+    calc_cell(s, f"{IL}{r}", f"={prev_i}+" + "+".join(f"{get_column_letter(6 + k*4)}{r}" for k in range(N)),
+              '$#,##0.00')
+widths(s, dict({"A": 8, "B": 12, "C": 12, "D": 14, "E": 15, TL: 16, IL: 20},
+               **{get_column_letter(6 + i): 11 for i in range(N * 4)}))
+s.freeze_panes = "F6"
 s.sheet_view.showGridLines = False
+note(s, 6 + M + 1, "Minimums due shrink as debts clear, so the spare column grows on its own \u2014 that is the snowball rolling forward.")
 
 # ---------- Summary ----------
 u = wb.create_sheet("Summary")

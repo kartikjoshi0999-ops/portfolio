@@ -18,9 +18,9 @@ Profit is an opinion. Cash is a fact. This model forecasts the fact — month by
 
 WHAT YOU GET
 ✓ Separates profit from cash — the distinction that closes profitable businesses
-✓ Collection terms built in: what you collect in the month of sale, what arrives 30 days later, and what you never collect
+✓ Collection terms built in: what you collect in the month of sale, what arrives 30 days later, what you never collect — and any receivables already outstanding on day one
 ✓ Supplier payment terms modelled the same way
-✓ Sales tax handled properly, including quarterly remittance, plus income tax instalments
+✓ Sales tax handled properly: HST collected, HST paid on purchases, and quarterly remittance NET of input tax credits — plus income tax instalments
 ✓ A ⚠ SHORT flag on any month where cash goes negative
 ✓ Break-even revenue calculated for you, and two charts your bank or lender will expect to see
 ✓ Built-in checks that warn you when your assumptions do not add up to 100%

@@ -17,8 +17,8 @@ See PRICING-AND-FEES.md for the full working.
 Interviews in banking are far more predictable than candidates expect. The same twenty behavioural themes and the same forty technical concepts come up again and again, because hiring managers are testing the same three things every time.
 
 WHAT YOU GET
-✓ 120 questions that actually get asked, not a generic list scraped from the internet
-✓ Model answers written the way you should say them — short enough to deliver in 60 seconds
+✓ 120 questions that actually get asked: 40 behavioural, 22 core finance, 20 AML and KYC, 18 credit, 20 payments and operations
+✓ 22 of them carry a full worked answer, written the way you should say it — short enough to deliver in 60 seconds; the rest are listed for you to rehearse in your own words
 ✓ A full AML, KYC and FINTRAC section: structuring, the 24-hour rule, PEPs, source of funds versus source of wealth
 ✓ Credit questions with real substance: the five Cs, GDS and TDS, and how to handle a decline without losing the client
 ✓ Payments and operations: reconciliation technique, maker-checker, SLA triage, why end of day matters
