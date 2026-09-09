@@ -3,174 +3,500 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Kartik Joshi — Resume</title>
+<title>Kartik Joshi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#fff;color:#1a1a1a;font-size:9.5pt;line-height:1.45}
+
+:root{
+  --ink:       #1A2332;
+  --rule-mid:  #2D4560;
+  --gold:      #B8862A;
+  --gold-lt:   #D4A84B;
+  --paper:     #FAFAF7;
+  --paper-2:   #F2F0EB;
+  --body:      #2E3440;
+  --muted:     #6B7A8D;
+  --s-bg:      #182030;
+  --s-surf:    #1F2E42;
+  --s-text:    #C2D0DC;
+  --s-muted:   #5E7A92;
+  --s-gold:    #C9A84C;
+}
+
+html{background:var(--paper)}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:9pt;
+  line-height:1.5;
+  color:var(--body);
+  background:var(--paper);
+}
 a{color:inherit;text-decoration:none}
 
-.wrap{display:flex;min-height:100vh;max-width:900px;margin:0 auto;box-shadow:0 0 20px rgba(0,0,0,.12)}
+/* ── OUTER SHELL ── */
+.resume{
+  display:flex;
+  min-height:100vh;
+  max-width:860px;
+  margin:0 auto;
+  box-shadow:0 2px 40px rgba(0,0,0,.18);
+}
 
-/* LEFT SIDEBAR */
-.side{width:240px;flex-shrink:0;background:#1C2B3A;color:#e8e4da;padding:28px 20px;display:flex;flex-direction:column;gap:24px}
-.side-name{font-size:22pt;font-weight:900;letter-spacing:-.5px;color:#fff;line-height:1;margin-bottom:4px}
-.side-title{font-size:8pt;color:#7a9db5;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}
-.side-sec{margin-bottom:4px}
-.side-sec-head{font-size:7pt;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#7a9db5;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:5px;margin-bottom:10px}
-.ach-item{margin-bottom:12px}
-.ach-title{font-size:8.5pt;font-weight:700;color:#C9A84C;margin-bottom:3px}
-.ach-desc{font-size:7.5pt;color:#b0bec5;line-height:1.5}
-.cert-item{font-size:8pt;color:#e8e4da;margin-bottom:6px;line-height:1.4}
+/* ── SIDEBAR ── */
+.side{
+  width:37%;
+  flex-shrink:0;
+  background:var(--s-bg);
+  color:var(--s-text);
+  padding:32px 22px 40px;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+
+.s-identity{
+  border-bottom:1px solid rgba(255,255,255,.08);
+  padding-bottom:22px;
+  margin-bottom:22px;
+}
+.s-name{
+  font-family:'Playfair Display',Georgia,serif;
+  font-weight:500;
+  font-size:26pt;
+  line-height:1.05;
+  color:#fff;
+  letter-spacing:-.5px;
+  margin-bottom:3px;
+}
+.s-name-rule{
+  width:32px;height:2px;
+  background:var(--s-gold);
+  margin:8px 0 10px;
+}
+.s-tagline{
+  font-size:7pt;
+  font-weight:500;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--s-muted);
+  line-height:1.6;
+}
+
+.s-section{margin-bottom:20px}
+.s-section:last-child{margin-bottom:0}
+.s-head{
+  font-size:6.5pt;
+  font-weight:600;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--s-muted);
+  padding-bottom:6px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  margin-bottom:12px;
+}
+
+/* Achievements */
+.ach{margin-bottom:13px}
+.ach:last-child{margin-bottom:0}
+.ach-title{
+  font-size:8pt;
+  font-weight:600;
+  color:var(--s-gold);
+  margin-bottom:3px;
+  line-height:1.35;
+}
+.ach-desc{
+  font-size:7.5pt;
+  font-weight:300;
+  color:var(--s-text);
+  line-height:1.55;
+  opacity:.85;
+}
+
+/* Certs */
+.cert{
+  font-size:7.5pt;
+  color:var(--s-text);
+  line-height:1.4;
+  margin-bottom:7px;
+  padding-left:10px;
+  position:relative;
+}
+.cert::before{
+  content:'';
+  position:absolute;
+  left:0;top:6px;
+  width:4px;height:4px;
+  border-radius:50%;
+  background:var(--s-gold);
+  opacity:.6;
+}
+
+/* Skills */
 .skill-group{margin-bottom:10px}
-.skill-group-title{font-size:7.5pt;font-weight:700;color:#7a9db5;margin-bottom:4px}
-.skill-tags{font-size:7.5pt;color:#b0bec5;line-height:1.65}
-.lang-item{font-size:8pt;color:#e8e4da;margin-bottom:3px}
+.skill-group:last-child{margin-bottom:0}
+.skill-label{
+  font-size:6.5pt;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--s-muted);
+  margin-bottom:4px;
+}
+.skill-body{
+  font-size:7.5pt;
+  font-weight:300;
+  color:var(--s-text);
+  line-height:1.65;
+  opacity:.85;
+}
 
-/* MAIN CONTENT */
-.main{flex:1;padding:28px 28px 28px 24px}
-.contact-bar{display:flex;flex-wrap:wrap;gap:10px;font-size:8pt;color:#555;margin-bottom:18px;border-bottom:1.5px solid #1C2B3A;padding-bottom:10px}
-.contact-bar span{display:flex;align-items:center;gap:4px}
-.main-sec-head{font-size:11pt;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:#1C2B3A;border-bottom:2px solid #1C2B3A;padding-bottom:3px;margin:16px 0 10px}
-.main-sec-head:first-child{margin-top:0}
+/* Languages */
+.lang{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:8pt;
+  color:var(--s-text);
+  margin-bottom:5px;
+}
+.lang-dot{
+  width:5px;height:5px;
+  border-radius:50%;
+  background:var(--s-gold);
+  opacity:.5;
+  flex-shrink:0;
+}
 
-/* SUMMARY */
-.summary{font-size:8.5pt;color:#333;line-height:1.65;margin-bottom:4px}
+/* ── MAIN COLUMN ── */
+.main{
+  flex:1;
+  background:var(--paper);
+  padding:28px 28px 40px 26px;
+}
 
-/* EXPERIENCE ENTRY */
-.exp-entry{margin-bottom:14px}
-.exp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px}
-.exp-role{font-size:9.5pt;font-weight:700;color:#1C2B3A}
-.exp-dates{font-size:8pt;color:#666;white-space:nowrap;flex-shrink:0}
-.exp-org{font-size:8.5pt;color:#C9A84C;font-weight:600;margin-bottom:5px}
-.exp-loc{font-size:7.5pt;color:#888}
-.exp-bullets{list-style:none;display:flex;flex-direction:column;gap:3px}
-.exp-bullets li{font-size:8pt;color:#444;padding-left:12px;position:relative;line-height:1.55}
-.exp-bullets li::before{content:'-';position:absolute;left:0;color:#C9A84C;font-weight:700}
+/* Contact bar */
+.contact-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 18px;
+  font-size:7.5pt;
+  color:var(--muted);
+  margin-bottom:20px;
+  padding-bottom:14px;
+  border-bottom:1.5px solid var(--ink);
+}
+.contact-item{display:flex;align-items:center;gap:5px}
+.contact-icon{
+  font-size:8pt;
+  color:var(--gold);
+}
 
-/* ADDITIONAL EXPERIENCE */
-.add-exp{display:grid;grid-template-columns:1fr;gap:5px;margin-bottom:4px}
-.add-row{display:flex;justify-content:space-between;align-items:baseline;font-size:8pt}
-.add-role{font-weight:600;color:#333}
-.add-org{color:#888;font-size:7.5pt}
-.add-dates{color:#888;font-size:7.5pt;white-space:nowrap}
+/* Section headers — Playfair Display at normal weight, thin gold rule */
+.sec-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:18px 0 10px;
+  font-family:'Playfair Display',Georgia,serif;
+  font-weight:400;
+  font-size:9.5pt;
+  letter-spacing:.04em;
+  color:var(--ink);
+}
+.sec-head:first-of-type{margin-top:0}
+.sec-head::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  opacity:.5;
+}
 
-/* PROJECTS */
-.proj-entry{margin-bottom:10px}
-.proj-title{font-size:8.5pt;font-weight:700;color:#1C2B3A;margin-bottom:3px}
-.proj-bullets{list-style:none;display:flex;flex-direction:column;gap:3px}
-.proj-bullets li{font-size:8pt;color:#444;padding-left:12px;position:relative;line-height:1.55}
-.proj-bullets li::before{content:'-';position:absolute;left:0;color:#C9A84C;font-weight:700}
+/* Summary */
+.summary{
+  font-size:8.5pt;
+  font-weight:400;
+  line-height:1.7;
+  color:var(--body);
+  max-width:62ch;
+}
 
-/* EDUCATION */
-.edu-entry{margin-bottom:10px}
-.edu-deg{font-size:9pt;font-weight:700;color:#1C2B3A}
-.edu-field{font-size:8.5pt;color:#C9A84C;font-weight:600}
-.edu-school{font-size:8pt;color:#555;margin-top:2px}
-.edu-dates{font-size:7.5pt;color:#888}
-.edu-badge{display:inline-block;margin-top:4px;padding:2px 8px;background:rgba(46,160,80,.1);border:1px solid rgba(46,160,80,.3);color:#2a7a40;border-radius:3px;font-size:6.5pt;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+/* Experience */
+.exp{margin-bottom:14px}
+.exp:last-child{margin-bottom:0}
+.exp-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:8px;
+  margin-bottom:1px;
+}
+.exp-role{
+  font-size:9pt;
+  font-weight:600;
+  color:var(--ink);
+  line-height:1.3;
+}
+.exp-dates{
+  font-family:'JetBrains Mono',monospace;
+  font-size:7pt;
+  font-weight:400;
+  color:var(--muted);
+  white-space:nowrap;
+  flex-shrink:0;
+  font-variant-numeric:tabular-nums;
+}
+.exp-org-row{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  margin-bottom:6px;
+}
+.exp-org{
+  font-size:8pt;
+  font-weight:500;
+  color:var(--gold);
+}
+.exp-loc{
+  font-size:7pt;
+  color:var(--muted);
+}
+.exp-bullets{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+.exp-bullets li{
+  font-size:8pt;
+  font-weight:400;
+  color:var(--body);
+  padding-left:11px;
+  position:relative;
+  line-height:1.55;
+}
+.exp-bullets li::before{
+  content:'–';
+  position:absolute;
+  left:0;
+  color:var(--gold);
+  font-weight:300;
+}
 
-/* Logo badges in experience */
-.org-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font-size:7pt;font-weight:900;color:#fff;flex-shrink:0;margin-right:6px;vertical-align:middle}
-.badge-fd{background:#2ECC71}
-.badge-bm{background:#E63946}
-.badge-db{background:#E63946}
-.badge-lk{background:#6A4C9C}
+/* Additional experience — compact table rows */
+.addl{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.addl-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:8px;
+  font-size:8pt;
+  padding:4px 0;
+  border-bottom:1px solid var(--paper-2);
+}
+.addl-row:last-child{border-bottom:none}
+.addl-role{font-weight:600;color:var(--ink)}
+.addl-org{color:var(--muted);font-weight:400}
+.addl-dates{
+  font-family:'JetBrains Mono',monospace;
+  font-size:7pt;
+  color:var(--muted);
+  white-space:nowrap;
+  flex-shrink:0;
+  font-variant-numeric:tabular-nums;
+}
 
+/* Projects */
+.proj-bullets{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.proj-bullets li{
+  font-size:8pt;
+  color:var(--body);
+  padding-left:11px;
+  position:relative;
+  line-height:1.6;
+}
+.proj-bullets li::before{
+  content:'–';
+  position:absolute;
+  left:0;
+  color:var(--gold);
+  font-weight:300;
+}
+
+/* Education */
+.edu-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px 18px;
+}
+.edu{padding:0}
+.edu-deg{
+  font-size:8.5pt;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:1px;
+}
+.edu-field{
+  font-size:8pt;
+  font-weight:500;
+  color:var(--gold);
+  margin-bottom:3px;
+}
+.edu-school{
+  font-size:7.5pt;
+  color:var(--muted);
+  margin-bottom:2px;
+}
+.edu-dates{
+  font-family:'JetBrains Mono',monospace;
+  font-size:6.5pt;
+  color:var(--muted);
+  font-variant-numeric:tabular-nums;
+}
+.wes-badge{
+  display:inline-block;
+  margin-top:5px;
+  padding:2px 7px;
+  background:rgba(46,160,80,.08);
+  border:1px solid rgba(46,160,80,.25);
+  color:#2A7040;
+  border-radius:2px;
+  font-size:6pt;
+  font-weight:600;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .resume{flex-direction:column}
+  .side{width:100%;padding:24px 20px}
+  .main{padding:24px 20px}
+  .edu-grid{grid-template-columns:1fr}
+  .contact-bar{gap:4px 12px}
+  .exp-top{flex-direction:column;gap:1px}
+}
+
+/* ── PRINT ── */
 @media print{
-  body{font-size:9pt}
-  .wrap{box-shadow:none;max-width:100%}
+  html,body{background:#fff}
+  .resume{
+    box-shadow:none;
+    max-width:100%;
+    min-height:unset;
+  }
+  .side{background:#1A2332;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .exp{page-break-inside:avoid}
+  .main-sec-head{page-break-after:avoid}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="resume">
 
-<!-- SIDEBAR -->
-<div class="side">
-  <div>
-    <div class="side-name">KARTIK<br>JOSHI</div>
-    <div class="side-title">Financial Services · Investment Sales · Banking Operations</div>
+<!-- ══ SIDEBAR ══════════════════════════════════════════════════════════ -->
+<aside class="side">
+
+  <div class="s-identity">
+    <div class="s-name">Kartik<br>Joshi</div>
+    <div class="s-name-rule"></div>
+    <div class="s-tagline">Financial Services<br>Investment Sales<br>Banking Operations</div>
   </div>
 
-  <div class="side-sec">
-    <div class="side-sec-head">Key Achievements</div>
-    <div class="ach-item">
+  <div class="s-section">
+    <div class="s-head">Key Achievements</div>
+    <div class="ach">
       <div class="ach-title">Current Freelance Engagement</div>
       <div class="ach-desc">Creating Excel dashboard templates and business websites for independent projects.</div>
     </div>
-    <div class="ach-item">
+    <div class="ach">
       <div class="ach-title">Investment Sales Support</div>
       <div class="ach-desc">CIFC-trained; supported client conversations across registered accounts, mutual funds and investment options at BMO.</div>
     </div>
-    <div class="ach-item">
+    <div class="ach">
       <div class="ach-title">Compliance &amp; Control Reliability</div>
       <div class="ach-desc">Maintained audit-ready KYC/KYP, suitability, privacy and documentation practices.</div>
     </div>
-    <div class="ach-item">
+    <div class="ach">
       <div class="ach-title">Payments Operations</div>
       <div class="ach-desc">Executed high-volume, time-critical and cross-border transactions within SLA and cut-off requirements.</div>
     </div>
   </div>
 
-  <div class="side-sec">
-    <div class="side-sec-head">Certifications</div>
-    <div class="cert-item">Canadian Investment Funds Course (CIFC)</div>
-    <div class="cert-item">Financial Planning &amp; Analysis Professional (FPAP™)</div>
-    <div class="cert-item">IBM RAG and Agentic AI Specialization</div>
-    <div class="cert-item">Financial Modeling &amp; Valuation Analyst (FMVA®)</div>
-    <div class="cert-item">Commercial Banking &amp; Credit Analyst (CBCA®)</div>
-    <div class="cert-item">Corporate Finance Foundations</div>
-    <div class="cert-item">World Education Services Credential Evaluation</div>
-    <div class="cert-item">Google AI Essentials Specialization</div>
-    <div class="cert-item">Agile Foundations (PMI)</div>
-    <div class="cert-item">Introduction to Capital Markets (CFI)</div>
+  <div class="s-section">
+    <div class="s-head">Certifications</div>
+    <div class="cert">Canadian Investment Funds Course (CIFC)</div>
+    <div class="cert">Financial Planning &amp; Analysis Professional (FPAP™)</div>
+    <div class="cert">IBM RAG and Agentic AI Specialization</div>
+    <div class="cert">Financial Modeling &amp; Valuation Analyst (FMVA®)</div>
+    <div class="cert">Commercial Banking &amp; Credit Analyst (CBCA®)</div>
+    <div class="cert">Corporate Finance Foundations</div>
+    <div class="cert">World Education Services Credential Evaluation</div>
+    <div class="cert">Google AI Essentials Specialization</div>
+    <div class="cert">Agile Foundations (PMI)</div>
+    <div class="cert">Introduction to Capital Markets (CFI)</div>
   </div>
 
-  <div class="side-sec">
-    <div class="side-sec-head">Skills</div>
+  <div class="s-section">
+    <div class="s-head">Skills</div>
     <div class="skill-group">
-      <div class="skill-group-title">Technical Knowledge</div>
-      <div class="skill-tags">Mutual funds · Investment sales support · Registered accounts (TFSA/RRSP/RESP) · KYC/KYP · Suitability · AML/KYC/FINTRAC · SWIFT · Cross-border payments · Transaction investigation · Audit support · SOPs · SAP ERP · Advanced Excel · Power BI · Dashboard templates · Website development · IBM RAG &amp; Agentic AI</div>
+      <div class="skill-label">Technical</div>
+      <div class="skill-body">Mutual funds · Investment sales support · Registered accounts (TFSA/RRSP/RESP) · KYC/KYP · Suitability · AML/KYC/FINTRAC · SWIFT · Cross-border payments · Transaction investigation · Audit support · SOPs · SAP ERP · Advanced Excel · Power BI · Dashboard templates · Website development · IBM RAG &amp; Agentic AI</div>
     </div>
     <div class="skill-group">
-      <div class="skill-group-title">Professional Skills</div>
-      <div class="skill-tags">Client service · Stakeholder management · Documentation · Training &amp; mentoring · Root-cause analysis · Attention to detail · Needs-based advisory</div>
+      <div class="skill-label">Professional</div>
+      <div class="skill-body">Client service · Stakeholder management · Documentation · Training &amp; mentoring · Root-cause analysis · Attention to detail · Needs-based advisory</div>
     </div>
   </div>
 
-  <div class="side-sec">
-    <div class="side-sec-head">Languages</div>
-    <div class="lang-item">English</div>
-    <div class="lang-item">Hindi</div>
-    <div class="lang-item">Punjabi</div>
-    <div class="lang-item">Gujarati</div>
+  <div class="s-section">
+    <div class="s-head">Languages</div>
+    <div class="lang"><div class="lang-dot"></div>English</div>
+    <div class="lang"><div class="lang-dot"></div>Hindi</div>
+    <div class="lang"><div class="lang-dot"></div>Punjabi</div>
+    <div class="lang"><div class="lang-dot"></div>Gujarati</div>
   </div>
-</div>
 
-<!-- MAIN CONTENT -->
-<div class="main">
+</aside>
 
-  <!-- CONTACT -->
+<!-- ══ MAIN COLUMN ═══════════════════════════════════════════════════════ -->
+<main class="main">
+
   <div class="contact-bar">
-    <span>📞 613-861-5147</span>
-    <span>✉ kartikjoshi0999@gmail.com</span>
-    <span>🔗 linkedin.com/in/kartikjoshi09</span>
-    <span>📍 Ontario, Canada</span>
+    <span class="contact-item"><span class="contact-icon">✆</span>613-861-5147</span>
+    <span class="contact-item"><span class="contact-icon">@</span>kartikjoshi0999@gmail.com</span>
+    <span class="contact-item"><span class="contact-icon">in</span>linkedin.com/in/kartikjoshi09</span>
+    <span class="contact-item"><span class="contact-icon">◎</span>Ontario, Canada</span>
   </div>
 
   <!-- SUMMARY -->
-  <div class="main-sec-head">Summary</div>
+  <div class="sec-head">Summary</div>
   <p class="summary">Banking operations, investment-sales support and financial-services professional with BMO and Deutsche Bank experience across personal banking, mutual fund and investment-option conversations, KYC/KYP, suitability, client due diligence, SWIFT payments, transaction investigation, reconciliation, audit support and control testing. CIFC and FP&amp;A credentialed, with current freelance engagement creating Excel dashboard templates and business websites. Known for disciplined execution, client service, audit-ready documentation and practical digital problem solving.</p>
 
   <!-- WORK EXPERIENCE -->
-  <div class="main-sec-head">Work Experience</div>
+  <div class="sec-head">Work Experience</div>
 
-  <div class="exp-entry">
-    <div class="exp-header">
-      <div class="exp-role"><span class="org-badge badge-fd">FD</span>Freelance Excel Dashboard &amp; Website Developer</div>
+  <div class="exp">
+    <div class="exp-top">
+      <div class="exp-role">Freelance Excel Dashboard &amp; Website Developer</div>
       <div class="exp-dates">02/2026 – Present</div>
     </div>
-    <div class="exp-org">Independent Projects &nbsp;&nbsp;<span class="exp-loc">Ontario, Canada</span></div>
+    <div class="exp-org-row">
+      <span class="exp-org">Independent Projects</span>
+      <span class="exp-loc">Ontario, Canada</span>
+    </div>
     <ul class="exp-bullets">
       <li>Created Excel dashboard templates for small business and professional-use cases, improving visibility into financial, operational and sales metrics.</li>
       <li>Built and refined business website pages with clear structure, mobile-friendly presentation and practical messaging.</li>
@@ -179,12 +505,15 @@ a{color:inherit;text-decoration:none}
     </ul>
   </div>
 
-  <div class="exp-entry">
-    <div class="exp-header">
-      <div class="exp-role"><span class="org-badge badge-bm">BM</span>Personal Banker</div>
+  <div class="exp">
+    <div class="exp-top">
+      <div class="exp-role">Personal Banker</div>
       <div class="exp-dates">09/2024 – 02/2026</div>
     </div>
-    <div class="exp-org">BMO &nbsp;&nbsp;<span class="exp-loc">Ontario, Canada</span></div>
+    <div class="exp-org-row">
+      <span class="exp-org">BMO</span>
+      <span class="exp-loc">Ontario, Canada</span>
+    </div>
     <ul class="exp-bullets">
       <li>Conducted needs-based banking conversations across everyday banking, lending, registered accounts, investment options and mutual fund solutions, aligned with CIFC knowledge and internal suitability requirements.</li>
       <li>Supported investment-selling activities by identifying client goals, explaining product features and risks, preparing documentation and referring or escalating needs appropriately.</li>
@@ -193,12 +522,15 @@ a{color:inherit;text-decoration:none}
     </ul>
   </div>
 
-  <div class="exp-entry">
-    <div class="exp-header">
-      <div class="exp-role"><span class="org-badge badge-bm">BM</span>Personal Banking Associate</div>
+  <div class="exp">
+    <div class="exp-top">
+      <div class="exp-role">Personal Banking Associate</div>
       <div class="exp-dates">02/2024 – 09/2024</div>
     </div>
-    <div class="exp-org">BMO &nbsp;&nbsp;<span class="exp-loc">Ontario, Canada</span></div>
+    <div class="exp-org-row">
+      <span class="exp-org">BMO</span>
+      <span class="exp-loc">Ontario, Canada</span>
+    </div>
     <ul class="exp-bullets">
       <li>Processed routine transactions and account openings accurately under internal control procedures.</li>
       <li>Conducted due diligence and complied with regulatory, privacy and documentation requirements.</li>
@@ -206,12 +538,15 @@ a{color:inherit;text-decoration:none}
     </ul>
   </div>
 
-  <div class="exp-entry">
-    <div class="exp-header">
-      <div class="exp-role"><span class="org-badge badge-db">DB</span>Payment Processing Analyst</div>
+  <div class="exp">
+    <div class="exp-top">
+      <div class="exp-role">Payment Processing Analyst</div>
       <div class="exp-dates">07/2021 – 07/2022</div>
     </div>
-    <div class="exp-org">Deutsche Bank &nbsp;&nbsp;<span class="exp-loc">Jaipur, India</span></div>
+    <div class="exp-org-row">
+      <span class="exp-org">Deutsche Bank</span>
+      <span class="exp-loc">Jaipur, India</span>
+    </div>
     <ul class="exp-bullets">
       <li>Executed end-to-end high-volume, time-critical payments, including cross-border transactions, within SLAs and cut-offs.</li>
       <li>Investigated pre- and post-execution payment issues and resolved inquiries from clients and internal teams.</li>
@@ -220,12 +555,15 @@ a{color:inherit;text-decoration:none}
     </ul>
   </div>
 
-  <div class="exp-entry">
-    <div class="exp-header">
-      <div class="exp-role"><span class="org-badge badge-db">DB</span>Financial Analyst</div>
+  <div class="exp">
+    <div class="exp-top">
+      <div class="exp-role">Financial Analyst</div>
       <div class="exp-dates">11/2020 – 06/2021</div>
     </div>
-    <div class="exp-org">Deutsche Bank &nbsp;&nbsp;<span class="exp-loc">Jaipur, India</span></div>
+    <div class="exp-org-row">
+      <span class="exp-org">Deutsche Bank</span>
+      <span class="exp-loc">Jaipur, India</span>
+    </div>
     <ul class="exp-bullets">
       <li>Managed time-sensitive confirmation requests and transaction verification across counterparties.</li>
       <li>Investigated trade-data breaks, reconciled discrepancies and performed root-cause analysis.</li>
@@ -234,12 +572,15 @@ a{color:inherit;text-decoration:none}
     </ul>
   </div>
 
-  <div class="exp-entry">
-    <div class="exp-header">
-      <div class="exp-role"><span class="org-badge badge-lk">LK</span>Account Executive</div>
+  <div class="exp">
+    <div class="exp-top">
+      <div class="exp-role">Account Executive</div>
       <div class="exp-dates">12/2019 – 03/2020</div>
     </div>
-    <div class="exp-org">Lenskart.com &nbsp;&nbsp;<span class="exp-loc">Faridabad, India</span></div>
+    <div class="exp-org-row">
+      <span class="exp-org">Lenskart.com</span>
+      <span class="exp-loc">Faridabad, India</span>
+    </div>
     <ul class="exp-bullets">
       <li>Managed AP and AR cycles, including invoice processing, three-way matching, B2B invoicing and collections.</li>
       <li>Reconciled vendor accounts, bank statements and payment-gateway reports; resolved invoice and payment discrepancies.</li>
@@ -248,55 +589,62 @@ a{color:inherit;text-decoration:none}
   </div>
 
   <!-- ADDITIONAL CANADIAN EXPERIENCE -->
-  <div class="main-sec-head">Additional Canadian Experience</div>
-  <div class="add-exp">
-    <div class="add-row"><div><span class="add-role">Front Desk Concierge</span> &nbsp;·&nbsp; <span class="add-org">Super 8 by Wyndham</span></div><div class="add-dates">05/2024 – 01/2025 · Ontario</div></div>
-    <div class="add-row"><div><span class="add-role">Customer Service Representative</span> &nbsp;·&nbsp; <span class="add-org">Virgin Plus</span></div><div class="add-dates">07/2023 – 11/2023 · Ontario</div></div>
-    <div class="add-row"><div><span class="add-role">Electronics &amp; Photo Centre Associate</span> &nbsp;·&nbsp; <span class="add-org">OSL Retail Services</span></div><div class="add-dates">10/2022 – 07/2023 · Ontario</div></div>
+  <div class="sec-head">Additional Canadian Experience</div>
+  <div class="addl">
+    <div class="addl-row">
+      <div><span class="addl-role">Front Desk Concierge</span>&ensp;<span class="addl-org">Super 8 by Wyndham</span></div>
+      <div class="addl-dates">05/2024 – 01/2025 · Ontario</div>
+    </div>
+    <div class="addl-row">
+      <div><span class="addl-role">Customer Service Representative</span>&ensp;<span class="addl-org">Virgin Plus</span></div>
+      <div class="addl-dates">07/2023 – 11/2023 · Ontario</div>
+    </div>
+    <div class="addl-row">
+      <div><span class="addl-role">Electronics &amp; Photo Centre Associate</span>&ensp;<span class="addl-org">OSL Retail Services</span></div>
+      <div class="addl-dates">10/2022 – 07/2023 · Ontario</div>
+    </div>
   </div>
 
   <!-- APPLIED AI & DIGITAL PROJECTS -->
-  <div class="main-sec-head">Applied AI &amp; Digital Projects</div>
-  <div class="proj-entry">
-    <ul class="proj-bullets">
-      <li>Built practical Excel dashboard templates and business-facing website pages through freelance engagements.</li>
-      <li>Developed FinPulse — a production-grade React.js financial analytics dashboard with live market data, AI chatbot integration (Claude, GPT-4, Gemini APIs), TFSA/RRSP calculators, portfolio tracker and forex monitoring. Deployed on Vercel with CI/CD.</li>
-      <li>Prototyped transaction-monitoring and risk-analysis concepts using applied AI tooling while preserving human review and compliance judgment.</li>
-    </ul>
-  </div>
+  <div class="sec-head">Applied AI &amp; Digital Projects</div>
+  <ul class="proj-bullets">
+    <li>Built practical Excel dashboard templates and business-facing website pages through freelance engagements.</li>
+    <li>Developed FinPulse — a production-grade React.js financial analytics dashboard with live market data, AI chatbot integration (Claude, GPT-4, Gemini APIs), TFSA/RRSP calculators, portfolio tracker and forex monitoring. Deployed on Vercel with CI/CD.</li>
+    <li>Prototyped transaction-monitoring and risk-analysis concepts using applied AI tooling while preserving human review and compliance judgment.</li>
+  </ul>
 
   <!-- EDUCATION -->
-  <div class="main-sec-head">Education</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-    <div class="edu-entry">
+  <div class="sec-head">Education</div>
+  <div class="edu-grid">
+    <div class="edu">
       <div class="edu-deg">Postgraduate Certificate</div>
       <div class="edu-field">Supply Chain Management</div>
       <div class="edu-school">St. Lawrence College</div>
       <div class="edu-dates">09/2022 – 04/2023 · Ontario, Canada</div>
     </div>
-    <div class="edu-entry">
+    <div class="edu">
       <div class="edu-deg">Postgraduate Certificate</div>
       <div class="edu-field">Project Management</div>
       <div class="edu-school">St. Lawrence College</div>
       <div class="edu-dates">05/2023 – 12/2023 · Ontario, Canada</div>
     </div>
-    <div class="edu-entry">
+    <div class="edu">
       <div class="edu-deg">Master of Business Administration</div>
       <div class="edu-field">Finance &amp; Marketing</div>
       <div class="edu-school">R. A. Podar Institute of Management</div>
       <div class="edu-dates">2017 – 2019 · India</div>
-      <div class="edu-badge">WES: Canadian Master's Equivalent</div>
+      <div class="wes-badge">WES: Canadian Master's Equivalent</div>
     </div>
-    <div class="edu-entry">
+    <div class="edu">
       <div class="edu-deg">Bachelor of Business Administration</div>
       <div class="edu-field">Finance</div>
       <div class="edu-school">S.S. Jain Subodh P.G. College</div>
       <div class="edu-dates">2014 – 2017 · India</div>
-      <div class="edu-badge">WES: Canadian Bachelor's Equivalent</div>
+      <div class="wes-badge">WES: Canadian Bachelor's Equivalent</div>
     </div>
   </div>
 
-</div>
+</main>
 </div>
 </body>
 </html>
